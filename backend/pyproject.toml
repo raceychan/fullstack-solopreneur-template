@@ -5,5 +5,5 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "lihil[standard,supabase]==0.2.11",
+    "lihil[standard,supabase]==0.2.13",
 ]
