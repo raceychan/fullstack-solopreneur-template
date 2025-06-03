@@ -455,7 +455,7 @@ wheels = [
 
 [[package]]
 name = "lihil"
-version = "0.2.11"
+version = "0.2.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ididi" },
@@ -466,9 +466,9 @@ dependencies = [
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/52/c7/be1c376886148eebea64c67718fa84324663302ead5426b8073ab0c1ed66/lihil-0.2.11.tar.gz", hash = "sha256:05fa7f33d4053c77a97b081dd87c0222d82b00a43cf9d133165b5811d24cc75b", size = 282453 }
+sdist = { url = "https://files.pythonhosted.org/packages/76/56/676f2cb6e580f50dc00edf351dc5f6717436e8e421a7de1a9b4730e75c20/lihil-0.2.13.tar.gz", hash = "sha256:0a28c8f77d71dd85a8e1f53284fae8b9c89861ee7fd8857655f4918fa3bfa50f", size = 282599 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/00/5e8d92e219031137df480dcc1f9373e0f6aa90e2c971aa7efeac7cc6e83d/lihil-0.2.11-py3-none-any.whl", hash = "sha256:b9de277176285acce41f176ed8f977b94fe5c9d314055563192764349f430cd7", size = 84183 },
+    { url = "https://files.pythonhosted.org/packages/af/52/85f25440dd996f95a397e42f286b62a04646c6ed806dc8da90fc8c10d089/lihil-0.2.13-py3-none-any.whl", hash = "sha256:756c4a6d05d47c27c59df429a489005d0162c67ffaa4f13927527846583d9aae", size = 84300 },
 ]
 
 [package.optional-dependencies]
@@ -1000,7 +1000,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "lihil", extras = ["standard", "supabase"], specifier = "==0.2.11" }]
+requires-dist = [{ name = "lihil", extras = ["standard", "supabase"], specifier = "==0.2.13" }]
 
 [[package]]
 name = "starlette"

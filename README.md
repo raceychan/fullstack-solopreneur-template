@@ -17,7 +17,7 @@ Typescript
 | API Codegen | OpenAPI-TS         |
 
 ### Backend
-Python
+Python 3.10
 
 | Component   | Tech               |
 |-------------|--------------------|
