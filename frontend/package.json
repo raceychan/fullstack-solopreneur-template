@@ -10,10 +10,12 @@
     "preview": "vite preview",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "knip": "knip"
+    "knip": "knip",
+    "openapi-ts": "openapi-ts"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.31.4",
+    "@hey-api/client-axios": "^0.8.0",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-alert-dialog": "^1.1.7",
     "@radix-ui/react-avatar": "^1.1.4",
@@ -61,6 +63,7 @@
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "@faker-js/faker": "^9.7.0",
+    "@hey-api/openapi-ts": "^0.69.2",
     "@tanstack/eslint-plugin-query": "^5.73.3",
     "@tanstack/react-query-devtools": "^5.74.3",
     "@tanstack/react-router-devtools": "^1.120.10",
