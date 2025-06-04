@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any
 
-from gotrue.types import SignInWithEmailAndPasswordCredentials, User
+from gotrue.types import SignInWithEmailAndPasswordCredentials
 from lihil import Annotated, Payload, Route
 from lihil.config import lhl_get_config
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin

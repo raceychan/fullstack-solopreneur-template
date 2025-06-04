@@ -1,13 +1,15 @@
 ## Tech Stack
 
-a full-fledge solopreneur template to let you develop & deploy an app with 0 cost.
+a full-fledged solopreneur template to let you develop & deploy an app with 0 cost.
 
-free as in beer, free as in speech, free as in ending modern slavery.
+Free as in beer, Free as in speech, Free as in ending modern slavery.
 
 Actively developing.
 
 ### Frontend
+
 Typescript
+
 
 | Component   | Tech               |
 |-------------|--------------------|
@@ -32,3 +34,15 @@ Python 3.10
 | Database          | Supabase     |
 | Frontend Hosting  | Cloudflare   |
 | Backend Hosting   | Vercel       |
+
+
+## Usage & version control
+
+You can either download the release zip file for source code
+or you can go to corresponding release branch and clone the repo.
+
+## Clone a single branch
+
+```bash
+git clone -b {branch_name} --single-branch {repo_url}
+```
