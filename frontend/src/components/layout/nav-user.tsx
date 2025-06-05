@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   BadgeCheck,
   Bell,
@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { useLogout } from '@/hooks/use-auth'
 
 export function NavUser({
   user,
@@ -34,6 +35,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+
+
 
   return (
     <SidebarMenu>
@@ -102,7 +105,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={useLogout()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

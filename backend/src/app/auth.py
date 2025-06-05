@@ -25,7 +25,7 @@ def jwt_decode(graph, func, sig):
 async def login_get_token(
     login_form: OAuthLoginForm,
     client: AsyncClient,
-):
+) -> OAuth2Token:
     form = SignInWithEmailAndPasswordCredentials(
         email=login_form.username, password=login_form.password
     )

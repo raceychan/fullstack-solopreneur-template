@@ -25,6 +25,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 export const loginGetTokenTokenPost = <ThrowOnError extends boolean = false>(options: Options<LoginGetTokenTokenPostData, ThrowOnError>) => {
     return (options.client ?? _heyApiClient).post<LoginGetTokenTokenPostResponses, LoginGetTokenTokenPostErrors, ThrowOnError>({
         ...formDataBodySerializer,
+        responseType: 'json',
         url: '/token',
         ...options,
         headers: {

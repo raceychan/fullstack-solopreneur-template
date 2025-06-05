@@ -2,6 +2,6 @@
 run:
 	uv run python -m src.main
 
-.PHONY: sync
-sync:
+.PHONY: api
+api:
 	uv run python -m scripts.sync_openapi

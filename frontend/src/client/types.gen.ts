@@ -19,6 +19,18 @@ export type OAuthLogin = {
 };
 
 /**
+ * OAuth2Token
+ * https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
+ */
+export type OAuth2Token = {
+    access_token: string;
+    expires_in: number;
+    token_type?: 'Bearer';
+    refresh_token?: string;
+    scope?: string;
+};
+
+/**
  * ProblemDetail
  * ## Specification:
  * - RFC 9457: https://www.rfc-editor.org/rfc/rfc9457.html
@@ -133,10 +145,12 @@ export type LoginGetTokenTokenPostError = LoginGetTokenTokenPostErrors[keyof Log
 
 export type LoginGetTokenTokenPostResponses = {
     /**
-     * Sucessful Response
+     * Successful Response
      */
-    200: unknown;
+    200: OAuth2Token;
 };
+
+export type LoginGetTokenTokenPostResponse = LoginGetTokenTokenPostResponses[keyof LoginGetTokenTokenPostResponses];
 
 export type GetUserMeGetData = {
     body?: never;
