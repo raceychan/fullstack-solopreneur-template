@@ -7,9 +7,11 @@ const ENV = import.meta.env;
 const API_HOST = ENV.VITE_BACKEND_API_HOST ?? "localhost";
 const API_PORT = ENV.VITE_BACKEND_API_PORT ?? "8000";
 const API_VERSION = ENV.VITE_BACKEND_API_VERSION ?? "1";
-
 const API_NETLOC = `${API_HOST}:${API_PORT}`;
 const API_BASE_URL = `http://${API_NETLOC}/api/v${API_VERSION}`;
+
+const REQUEST_TIMEOUT_MS = Number(ENV.VITE_REQUEST_TIMEOUT_MS ?? "3000");
+
 
 export const config = {
   API_HOST,
@@ -18,7 +20,7 @@ export const config = {
   API_NETLOC,
   API_BASE_URL,
   REQUEST: {
-    TIMEOUT_MS: 1000,
+    TIMEOUT_MS: REQUEST_TIMEOUT_MS,
   },
 } as const;
 

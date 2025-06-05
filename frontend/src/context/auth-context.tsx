@@ -1,131 +1,108 @@
-import React, { createContext, useContext, useCallback, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Config } from "@/config";
-import { useNavigate } from "@tanstack/react-router";
-import { AxiosError } from "axios";
-import { UseMutationResult } from "@tanstack/react-query";
-import { PublicUser } from "@/client";
-
-type ErrorResponse = {
-  type: string;
-  title: string;
-  detail: string;
-};
+import React, { createContext, useContext, useCallback, useState, useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
+import { loginGetTokenTokenPost, getUserMeGet } from '@/client/sdk.gen';
+import type { PublicUser, OAuth2Token } from '@/client/types.gen';
 
 interface AuthContextType {
-  loginMutation: UseMutationResult<
-    void,
-    ErrorResponse,
-    { email: string; password: string }
-  >;
-  loginWithGoogle: () => Promise<void>;
-  logout: () => void;
-  signup: (email: string, password: string, userName?: string) => void;
   user: PublicUser | undefined;
   isLoading: boolean;
-  authError: ErrorResponse | null;
+  error: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+  signup: (email: string, password: string, userName?: string) => Promise<void>;
+  loginWithGoogle: () => void;
 }
-const isLoggedIn = () => {
-  return localStorage.getItem("access_token") !== null;
-};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const queryClient = useQueryClient();
+export function getToken() {
+  return localStorage.getItem('access_token');
+}
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<PublicUser | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const [error, setError] = useState<ErrorResponse | null>(null);
-  const handleError = (error: unknown) => {
-    if (error instanceof AxiosError) {
-      const new_error = {
-        type: "Network Error",
-        title: "Can't connect to server",
-        detail: "Please try again later",
-      };
-      setError(new_error);
-    } else {
-      setError(error as ErrorResponse);
-    }
-  };
 
-  const signup = async (email: string, password: string, userName?: string) => {
+  // Fetch user if token exists
+  const fetchUser = useCallback(async () => {
+    const token = getToken();
+    if (!token) {
+      setUser(undefined);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
     try {
-      const resp = await AuthService.signup({
-        body: { user_name: userName, email: email, password: password },
+      const resp = await getUserMeGet();
+      if ('data' in resp && resp.data) {
+        setUser(resp.data as PublicUser);
+      } else {
+        setUser(undefined);
+      }
+    } catch (err: any) {
+      setUser(undefined);
+      setError('Failed to fetch user');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  // Login function
+  const login = useCallback(async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const resp = await loginGetTokenTokenPost({
+        body: { username: email, password },
       });
+
       if (resp.error) {
-        throw resp.error;
+        setError(resp.error.toString());
+        return;
       }
-      navigate({ to: "/login" });
-    } catch (error: unknown) {
-      handleError(error);
-    }
-  };
-
-  const { data: user, isLoading } = useQuery<PublicUser | undefined>({
-    queryKey: ["user"],
-    queryFn: async () => {
-      try {
-        const resp = await AuthService.getPublicUser();
-        if (resp.error) {
-          throw resp.error;
-        }
-        return resp.data;
-      } catch (error: unknown) {
-        handleError(error);
-        throw error;
+      else{
+        const token = resp.data.access_token;
+        localStorage.setItem('access_token', token);
+        await fetchUser();
+        navigate({ to: '/' });
       }
-    },
-    enabled: isLoggedIn(),
-  });
-
-  const login = async (email: string, password: string) => {
-    const response = await AuthService.login({
-      body: { username: email, password: password },
-    });
-
-    if (response.error) {
-      throw response.error;
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to login');
+    } finally {
+      setIsLoading(false);
     }
-    const token = response.data;
-    localStorage.setItem("access_token", token.access_token);
-  };
+  }, [fetchUser, navigate]);
 
-  const loginMutation = useMutation({
-    mutationFn: (credentials: { email: string; password: string }) =>
-      login(credentials.email, credentials.password),
-    onSuccess: () => {
-      navigate({ to: "/" });
-    },
-    onError: (error: ErrorResponse) => {
-      handleError(error);
-    },
-  });
-
-  const loginWithGoogle = async (): Promise<void> => {
-    window.location.href = `${Config.API_AUTH_URL}/google`;
-  };
-
+  // Logout function
   const logout = useCallback(() => {
-    localStorage.removeItem("access_token");
-    queryClient.setQueryData(["user"], null);
-    queryClient.invalidateQueries({ queryKey: ["user"] });
-    navigate({ to: "/sign-in" });
-  }, [navigate, queryClient]);
+    localStorage.removeItem('access_token');
+    setUser(undefined);
+    navigate({ to: '/sign-in' });
+  }, [navigate]);
+
+  // Signup stub (implement if backend supports it)
+  const signup = useCallback(async (email: string, password: string, userName?: string) => {
+    setError('Signup not implemented');
+    // Implement signup logic if/when backend supports it
+  }, []);
+
+  // Google login stub
+  const loginWithGoogle = useCallback(() => {
+    setError('Google login not implemented');
+    // Implement Google login if/when backend supports it
+  }, []);
 
   return (
     <AuthContext.Provider
-      value={{
-        loginMutation,
-        loginWithGoogle,
-        logout,
-        signup,
-        user,
-        isLoading,
-        authError: error,
-      }}
+      value={{ user, isLoading, error, login, logout, signup, loginWithGoogle }}
     >
       {children}
     </AuthContext.Provider>
@@ -135,10 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
-
-export { isLoggedIn };
-export default useAuth;

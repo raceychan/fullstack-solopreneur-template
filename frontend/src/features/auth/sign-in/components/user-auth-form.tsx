@@ -2,7 +2,7 @@ import { HTMLAttributes, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { IconBrandFacebook, IconBrandGithub } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
-import { loginGetTokenTokenPost } from '@/client' // adjust path as needed
+import { useAuth } from '@/context/auth-context'
 
 type UserAuthFormProps = HTMLAttributes<HTMLFormElement>
 
@@ -38,6 +38,8 @@ const formSchema = z.object({
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,15 +54,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true)
     setError(null)
     try {
-      const data = await loginGetTokenTokenPost({
-        body: {
-          username: form.getValues('email'),
-          password: form.getValues('password'),
-        },
-      })
-      console.log("data", data);
-      // Store token as needed, e.g. localStorage.setItem('token', data.access_token)
-      // Redirect or update UI as needed
+      await login(form.getValues('email'), form.getValues('password'))
+      await navigate({ to: '/' })
     } catch (err) {
       setError('Invalid email or password')
     } finally {

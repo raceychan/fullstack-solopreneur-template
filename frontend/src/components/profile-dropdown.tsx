@@ -11,9 +11,10 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { useLogout } from '@/hooks/use-auth'
+import { useAuth } from '@/context/auth-context'
 
 export function ProfileDropdown() {
+  const { logout } = useAuth()
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -56,7 +57,7 @@ export function ProfileDropdown() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={useLogout()}>
+        <DropdownMenuItem onClick={logout}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
