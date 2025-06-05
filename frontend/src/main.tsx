@@ -15,6 +15,9 @@ import { ThemeProvider } from './context/theme-context'
 import './index.css'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
+import { init_app } from './config/config'
+
+init_app();
 
 const queryClient = new QueryClient({
   defaultOptions: {
