@@ -2,6 +2,6 @@
 api:
 	npx openapi-ts
 
-.PHONY: run
-run: 
+.PHONY: dev
+dev: 
 	npm run dev

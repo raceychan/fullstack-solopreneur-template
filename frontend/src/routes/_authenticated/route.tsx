@@ -7,6 +7,7 @@ export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ location }) => {
     const token = getAccessToken();
     if (!token) {
+      console.error("Fail to get token!", "got ${token}")
       throw redirect({
         to: '/sign-in',
         search: { redirect: location.href },

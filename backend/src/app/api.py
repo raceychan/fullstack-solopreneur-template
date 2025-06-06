@@ -1,10 +1,9 @@
 from lihil import Graph, Lihil, Route
 from lihil.plugins.auth.supabase import supabase_factory
-
-from src.config import ProjectConfig, read_config
-from src.app.auth import me, tokens
-from starlette.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncEngine, create_async_engine
+from src.app.auth import me, tokens
+from src.config import ProjectConfig, read_config
+from starlette.middleware.cors import CORSMiddleware
 
 
 def build_graph(config: ProjectConfig):
@@ -13,9 +12,9 @@ def build_graph(config: ProjectConfig):
 
     def engine_factory() -> AsyncEngine:
         # use config to build it here
-        return create_async_engine("aiosqlite:///:memory:")
+        return create_async_engine("sqlite+aiosqlite:///:memory:")
 
-    graph.node(engine_factory)
+    graph.resolve(engine_factory)
     return graph
 
 

@@ -26,11 +26,19 @@ export const config = {
 } as const;
 
 
-
 export const logApiResponse = (response: any) => {
+  const { method, url, data: requestData } = response.config || {};
+  const { status, data: responseData } = response;
+
   console.error(
-    `API Error: ${response.config.method} ${response.config.url} - Status: ${response.status}, Data: ${JSON.stringify(response.data)}, Request: ${JSON.stringify(response.config.data)}
-    Response: ${JSON.stringify(response)}`
+    [
+      "🚨 API Error",
+      `Method:   ${method?.toUpperCase()}`,
+      `URL:      ${url}`,
+      `Status:   ${status}`,
+      `Request:  ${JSON.stringify(requestData, null, 2)}`,
+      `Response: ${JSON.stringify(responseData, null, 2)}`,
+    ].join("\n")
   );
 };
 
@@ -69,8 +77,4 @@ export const initializeClient = () => {
 
 export const init_app = async () => {
   initializeClient();
-  const response = await client.get({
-    url: "/health",
-  });
-  console.log("response", response);
 }
