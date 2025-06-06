@@ -1,10 +1,14 @@
-import React, { createContext, useContext, useCallback, useState, useEffect } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { loginGetTokenTokenPost, getUserMeGet } from '@/client/sdk.gen';
-import type { PublicUser, OAuth2Token } from '@/client/types.gen';
+import type { PublicUser, ProblemDetail } from '@/client/types.gen';
+import { AxiosError } from 'axios';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { getAccessToken, setAccessToken } from "@/utils/auth-utils"
 
 interface AuthContextType {
-  user: PublicUser | undefined;
+  user: PublicUser | null;
   isLoading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
@@ -15,94 +19,92 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function getToken() {
-  return localStorage.getItem('access_token');
+
+
+function useUserQuery() {
+  return useQuery<PublicUser | null, unknown>({
+    queryKey: ['me'],
+    queryFn: async () => {
+      const token = getAccessToken();
+      if (!token) return null;
+
+      const resp = await getUserMeGet();
+      if (resp.error) {
+        // Log error and stack trace
+        const error = new Error(`getUserMeGet error: ${JSON.stringify(resp.error)}`);
+        console.error(error);
+        console.error(error.stack);
+        throw error; // Optionally throw to trigger React Query's error state
+      }
+      return resp.data;
+    },
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
 }
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<PublicUser | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  // Fetch user if token exists
-  const fetchUser = useCallback(async () => {
-    const token = getToken();
-    if (!token) {
-      setUser(undefined);
-      setIsLoading(false);
-      return;
-    }
-    setIsLoading(true);
-    setError(null);
-    try {
-      const resp = await getUserMeGet();
-      if ('data' in resp && resp.data) {
-        setUser(resp.data as PublicUser);
-      } else {
-        setUser(undefined);
-      }
-    } catch (err: any) {
-      setUser(undefined);
-      setError('Failed to fetch user');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const { data: user, isLoading, error } = useUserQuery();
 
-  useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+  const handleError = (error: unknown): string => {
+    if (error instanceof AxiosError) {
+      const new_error: ProblemDetail = {
+        type_: "Network Error",
+        status: 500,
+        title: "Can't connect to server",
+        detail: "Please try again later",
+        instance: "Network Error",
+      };
+      return JSON.stringify(new_error);
+    }
+    return String(error);
+  };
 
-  // Login function
   const login = useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
-    setError(null);
     try {
       const resp = await loginGetTokenTokenPost({
         body: { username: email, password },
       });
-
       if (resp.error) {
-        setError(resp.error.toString());
-        return;
+        throw new Error(resp.error.toString());
       }
-      else{
-        const token = resp.data.access_token;
-        localStorage.setItem('access_token', token);
-        await fetchUser();
-        navigate({ to: '/' });
-      }
+      const token_data = resp.data
+      setAccessToken(token_data.access_token, token_data.expires_in)
+      await queryClient.invalidateQueries({ queryKey: ['me'] });
     } catch (err: any) {
-      console.error(err);
-      setError('Failed to login');
-    } finally {
-      setIsLoading(false);
+      throw new Error(handleError(err));
     }
-  }, [fetchUser, navigate]);
+  }, [queryClient, navigate]);
 
-  // Logout function
   const logout = useCallback(() => {
     localStorage.removeItem('access_token');
-    setUser(undefined);
+    queryClient.setQueryData(['me'], undefined);
+    console.log("You are being logged out ")
     navigate({ to: '/sign-in' });
-  }, [navigate]);
+  }, [queryClient, navigate]);
 
-  // Signup stub (implement if backend supports it)
-  const signup = useCallback(async (email: string, password: string, userName?: string) => {
-    setError('Signup not implemented');
-    // Implement signup logic if/when backend supports it
+  const signup = useCallback(async () => {
+    throw new Error('Signup not implemented');
   }, []);
 
-  // Google login stub
   const loginWithGoogle = useCallback(() => {
-    setError('Google login not implemented');
-    // Implement Google login if/when backend supports it
+    throw new Error('Google login not implemented');
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoading, error, login, logout, signup, loginWithGoogle }}
+      value={{
+        user: user ?? null,
+        isLoading,
+        error: error ? handleError(error) : null,
+        login,
+        logout,
+        signup,
+        loginWithGoogle,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -116,3 +118,4 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+;

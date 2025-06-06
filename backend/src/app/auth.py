@@ -16,7 +16,7 @@ me = Route("me")
 def jwt_decode(graph, func, sig):
     config = lhl_get_config(config_type=ProjectConfig)
     jwt_auth = JWTAuthPlugin(
-        jwt_secret=config.JWT_SECRET, jwt_algorithms="HS256", verify_aud=False
+        jwt_secret=config.JWT_SECRET, jwt_algorithms="HS256", verify_aud=False, verify_iat=False
     )
     return jwt_auth.decode_plugin(audience="authenticated")(graph, func, sig)
 
@@ -30,10 +30,11 @@ async def login_get_token(
         email=login_form.username, password=login_form.password
     )
     resp = await client.auth.sign_in_with_password(form)
-    if not resp.session:
+    resp_session = resp.session
+    if not resp_session:
         raise Exception("no session")
 
-    return OAuth2Token(resp.session.access_token, resp.session.expires_in)
+    return OAuth2Token(resp_session.access_token, resp_session.expires_in)
 
 
 class PublicUser(Payload):

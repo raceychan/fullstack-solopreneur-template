@@ -55,7 +55,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setError(null)
     try {
       await login(form.getValues('email'), form.getValues('password'))
-      await navigate({ to: '/' })
+      navigate({ to: '/' })
     } catch (err) {
       setError('Invalid email or password')
     } finally {

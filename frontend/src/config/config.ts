@@ -1,6 +1,7 @@
 // frontend/src/config/config.ts
 
 import { client } from '@/client/client.gen'
+import { getAccessToken, removeAccessToken } from "@/utils/auth-utils"
 
 const ENV = import.meta.env;
 
@@ -33,13 +34,6 @@ export const logApiResponse = (response: any) => {
   );
 };
 
-// Use expires_at from localStorage, set after login
-const isTokenExpired = () => {
-  const expiresAt = localStorage.getItem("expires_at");
-  if (!expiresAt) return true;
-  return Date.now() >= Number(expiresAt);
-};
-
 export const initializeClient = () => {
   client.setConfig({
     baseURL: config.API_BASE_URL,
@@ -47,15 +41,12 @@ export const initializeClient = () => {
   });
 
   client.instance.interceptors.request.use((config) => {
-    const accessToken = localStorage.getItem("access_token") || "";
+    const accessToken = getAccessToken();
     if (accessToken) {
-      if (isTokenExpired()) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("expires_at");
-        window.location.href = "/login";
-        return Promise.reject("Token expired. Redirecting to login.");
-      }
-      config.headers.set("Authorization", `Bearer ${accessToken}`);
+        config.headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+    else{
+      config.headers.delete('Authorization');
     }
     return config;
   });
@@ -65,9 +56,8 @@ export const initializeClient = () => {
     (error) => {
       if (error.response) {
         if ([401, 404].includes(error.response.status)) {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("expires_at");
-          window.location.href = "/login";
+          removeAccessToken()
+          window.location.href = "/sign-in";
         }
         logApiResponse(error.response);
       }
