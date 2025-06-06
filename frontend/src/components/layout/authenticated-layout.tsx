@@ -6,22 +6,15 @@ import { SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/layout/app-sidebar'
 import SkipToMain from '@/components/skip-to-main'
 import { useAuth } from '@/context/auth-context'
-import { useNavigate } from '@tanstack/react-router'
-import { useEffect } from 'react'
+
 
 interface Props {
   children?: React.ReactNode
 }
 
 export function AuthenticatedLayout({ children }: Props) {
-  const { user, isLoading } = useAuth();
-  const navigate = useNavigate();
+  const {  isLoading } = useAuth();
 
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate({ to: '/sign-in' });
-    }
-  }, [isLoading, user, navigate]);
 
   if (isLoading) return <div>Loading...</div>;
 

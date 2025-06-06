@@ -3,7 +3,6 @@ from lihil.config import lhl_read_config
 
 
 class ProjectConfig(SupabaseConfig, kw_only=True):
-
     SUPABASE_PG_URL_TEMPLT: str
     SUPABASE_PG_PASSWORD: str
     JWT_SECRET: str
