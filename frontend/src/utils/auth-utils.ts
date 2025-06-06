@@ -14,10 +14,11 @@ export function getAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-export function setAccessToken(token: string, expiresInMs: number) {
-  const expiresAt = Date.now() + expiresInMs;
+export function setAccessToken(token: string, expiresInSeconds: number) {
+  const expiresAt = (Date.now() + expiresInSeconds * 1000).toString();
+  console.log(expiresAt)
   localStorage.setItem(ACCESS_TOKEN_KEY, token);
-  localStorage.setItem(EXPIRES_AT_KEY, expiresAt.toString());
+  localStorage.setItem(EXPIRES_AT_KEY, expiresAt);
 }
 
 export function removeAccessToken() {

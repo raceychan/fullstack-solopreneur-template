@@ -13,8 +13,7 @@ interface Props {
 }
 
 export function AuthenticatedLayout({ children }: Props) {
-  const {  isLoading } = useAuth();
-
+  const { isLoading } = useAuth();
 
   if (isLoading) return <div>Loading...</div>;
 
