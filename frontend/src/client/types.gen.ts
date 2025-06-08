@@ -99,10 +99,6 @@ export type InvalidRequestErrors = {
 export type SignUpRequest = {
     email: string;
     password: string;
-    first_name: string;
-    last_name: string;
-    username: string;
-    phone_number?: string | null;
 };
 
 /**
@@ -110,11 +106,11 @@ export type SignUpRequest = {
  */
 export type UserProfileDto = {
     id: string;
-    first_name: string;
-    last_name: string;
-    username: string;
+    first_name?: string | null;
+    last_name?: string | null;
+    username?: string | null;
     email: string;
-    phone_number: string | null;
+    phone_number?: string | null;
     status: UserStatus;
     role: UserRole;
     gmt_created: string;
@@ -129,7 +125,7 @@ export type UserStatus = 'active' | 'inactive' | 'invited' | 'suspended';
 /**
  * UserRole
  */
-export type UserRole = 'admin' | 'cashier' | 'manager' | 'superadmin';
+export type UserRole = 'admin' | 'manager' | 'superadmin' | 'user';
 
 /**
  * We received your credential but could not validate it
@@ -203,6 +199,32 @@ export type TaskUpdate = {
     status: TaskStatus;
     label: TaskLabel;
     priority: TaskPriority;
+};
+
+/**
+ * UserProfileCreate
+ */
+export type UserProfileCreate = {
+    first_name?: string | null;
+    last_name?: string | null;
+    username?: string | null;
+    email: string;
+    phone_number?: string | null;
+    status?: UserStatus;
+    role?: UserRole;
+};
+
+/**
+ * UserProfileUpdate
+ */
+export type UserProfileUpdate = {
+    first_name?: string | null;
+    last_name?: string | null;
+    username?: string | null;
+    email: string;
+    phone_number?: string | null;
+    status?: UserStatus;
+    role?: UserRole;
 };
 
 export type LoginGetTokenApiV1TokenPostData = {
@@ -382,6 +404,107 @@ export type UpdateTaskApiV1TasksPutErrors = {
 export type UpdateTaskApiV1TasksPutError = UpdateTaskApiV1TasksPutErrors[keyof UpdateTaskApiV1TasksPutErrors];
 
 export type UpdateTaskApiV1TasksPutResponses = {
+    /**
+     * No Content
+     */
+    200: unknown;
+};
+
+export type RemoveProfileApiV1ProfilesDeleteData = {
+    body?: never;
+    path?: never;
+    query: {
+        profile_id: string;
+    };
+    url: '/api/v1/profiles';
+};
+
+export type RemoveProfileApiV1ProfilesDeleteErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type RemoveProfileApiV1ProfilesDeleteError = RemoveProfileApiV1ProfilesDeleteErrors[keyof RemoveProfileApiV1ProfilesDeleteErrors];
+
+export type RemoveProfileApiV1ProfilesDeleteResponses = {
+    /**
+     * Sucessful Response
+     */
+    200: unknown;
+};
+
+export type GetProfilesApiV1ProfilesGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        limit?: number;
+        offset?: number;
+    };
+    url: '/api/v1/profiles';
+};
+
+export type GetProfilesApiV1ProfilesGetErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type GetProfilesApiV1ProfilesGetError = GetProfilesApiV1ProfilesGetErrors[keyof GetProfilesApiV1ProfilesGetErrors];
+
+export type GetProfilesApiV1ProfilesGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<UserProfileDto>;
+};
+
+export type GetProfilesApiV1ProfilesGetResponse = GetProfilesApiV1ProfilesGetResponses[keyof GetProfilesApiV1ProfilesGetResponses];
+
+export type CreateNewProfileApiV1ProfilesPostData = {
+    body: UserProfileCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/profiles';
+};
+
+export type CreateNewProfileApiV1ProfilesPostErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type CreateNewProfileApiV1ProfilesPostError = CreateNewProfileApiV1ProfilesPostErrors[keyof CreateNewProfileApiV1ProfilesPostErrors];
+
+export type CreateNewProfileApiV1ProfilesPostResponses = {
+    /**
+     * No Content
+     */
+    200: unknown;
+};
+
+export type UpdateProfileApiV1ProfilesPutData = {
+    body: UserProfileUpdate;
+    path?: never;
+    query: {
+        profile_id: string;
+    };
+    url: '/api/v1/profiles';
+};
+
+export type UpdateProfileApiV1ProfilesPutErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type UpdateProfileApiV1ProfilesPutError = UpdateProfileApiV1ProfilesPutErrors[keyof UpdateProfileApiV1ProfilesPutErrors];
+
+export type UpdateProfileApiV1ProfilesPutResponses = {
     /**
      * No Content
      */
