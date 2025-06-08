@@ -1,16 +1,15 @@
-from datetime import datetime
 from functools import lru_cache
 from typing import Any
 from uuid import uuid4
 
-from lihil import Annotated, Empty, Payload, Route
+from lihil import Annotated, Empty, Route
 from lihil.config import lhl_get_config
 from lihil.interface import Record
 from lihil.plugins import IEndpointInfo
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin
 from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuth2Token, OAuthLoginForm
 from lihil.plugins.auth.utils import hash_password, verify_password
-from sqlalchemy import insert, select, update
+from sqlalchemy import insert, select
 from src.app.profile import ProfileService, UserProfileCreate, UserProfileDTO
 from src.config import ProjectConfig
 from src.db.factory import AsyncConnection, conn_factory
@@ -43,10 +42,6 @@ def jwt_encode(endpint_info: IEndpointInfo):
 class SignUpRequest(Record):
     email: str
     password: str
-    first_name: str
-    last_name: str
-    username: str
-    phone_number: str | None = None
 
 
 class AuthService:
@@ -56,13 +51,8 @@ class AuthService:
 
     async def sign_up(self, signup_request: SignUpRequest):
         profile_data = UserProfileCreate(
-            first_name=signup_request.first_name,
-            last_name=signup_request.last_name,
-            username=signup_request.username,
             email=signup_request.email,
-            phone_number=signup_request.phone_number,
             status=UserStatus.ACTIVE,
-            role=UserRole.CASHIER,
         )
 
         profile_id = await self._profile_service.add_profile(profile_data)
@@ -111,7 +101,6 @@ class AuthService:
 tokens = Route("token")
 tokens.add_nodes(AuthService, conn_factory, ProfileService)
 auth = Route("auth")
-auth.add_nodes(AuthService, conn_factory, ProfileService)
 
 
 auth_scheme = OAuth2PasswordFlow(token_url="token")
@@ -120,12 +109,12 @@ auth_scheme = OAuth2PasswordFlow(token_url="token")
 @tokens.post(plugins=[jwt_encode])
 async def login_get_token(
     login_form: OAuthLoginForm, auth_service: AuthService
-) -> OAuth2Token:
+) -> UserProfileDTO:
     profile = await auth_service.authenticate(login_form.username, login_form.password)
     if not profile:
         raise Exception("Invalid credentials")
     # Return a simple token for now
-    return profile  # type: ignore
+    return profile
 
 
 @auth.post

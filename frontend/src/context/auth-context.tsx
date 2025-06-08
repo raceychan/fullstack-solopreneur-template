@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { loginGetTokenApiV1TokenPost, getUserApiV1MeGet } from '@/client/sdk.gen';
-import type { PublicUser, ProblemDetail } from '@/client/types.gen';
+import { loginGetTokenApiV1TokenPost, getMeApiV1AuthMeGet, signUpApiV1AuthPost } from '@/client/sdk.gen';
+import type { ProblemDetail, UserProfileDto } from '@/client/types.gen';
 import { AxiosError } from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getAccessToken, setAccessToken } from "@/utils/auth-utils"
 
 interface AuthContextType {
-  user: PublicUser | null;
+  user: UserProfileDto | null;
   isLoading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<void>;
@@ -22,13 +22,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 
 function useUserQuery() {
-  return useQuery<PublicUser | null, unknown>({
+  return useQuery<UserProfileDto | null, unknown>({
     queryKey: ['me'],
     queryFn: async () => {
       const token = getAccessToken();
       if (!token) return null;
 
-      const resp = await getUserApiV1MeGet();
+      const resp = await getMeApiV1AuthMeGet();
       if (resp.error) {
         // Log error and stack trace
         const error = new Error(`getUserMeGet error: ${JSON.stringify(resp.error)}`);
@@ -86,9 +86,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     navigate({ to: '/sign-in' });
   }, [queryClient, navigate]);
 
-  const signup = useCallback(async () => {
-    throw new Error('Signup not implemented');
-  }, []);
+  const signup = useCallback(async (email: string, password: string) => {
+    try {
+      const resp = await signUpApiV1AuthPost({
+        body: { email, password },
+      });
+      if (resp.error) {
+        throw new Error(resp.error.toString());
+      }
+      // Auto-login after successful signup
+      await login(email, password);
+    } catch (err: any) {
+      throw new Error(handleError(err));
+    }
+  }, [login]);
 
   const loginWithGoogle = useCallback(() => {
     throw new Error('Google login not implemented');

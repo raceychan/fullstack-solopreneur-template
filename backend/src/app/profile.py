@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 from lihil import Annotated, Empty, Route
 from lihil.interface import Record
@@ -7,27 +8,27 @@ from src.db.factory import AsyncConnection, conn_factory
 from src.db.tables import UserProfile, UserRole, UserStatus
 
 
-class UserProfileDTO(Record):
+class UserProfileDTO(Record, kw_only=True):
     id: str
-    first_name: str
-    last_name: str
-    username: str
+    first_name: str | None = None
+    last_name: str | None = None
+    username: str | None = None
     email: str
-    phone_number: str | None
+    phone_number: str | None = None
     status: UserStatus
     role: UserRole
     gmt_created: datetime
     gmt_modified: datetime
 
 
-class UserProfileCreate(Record):
-    first_name: str
-    last_name: str
-    username: str
+class UserProfileCreate(Record, kw_only=True):
+    first_name: str | None = None
+    last_name: str | None = None
+    username: str | None = None
     email: str
-    phone_number: str | None
-    status: UserStatus
-    role: UserRole
+    phone_number: str | None = None
+    status: UserStatus = UserStatus.ACTIVE
+    role: UserRole = UserRole.USER
 
 
 class UserProfileUpdate(UserProfileCreate): ...

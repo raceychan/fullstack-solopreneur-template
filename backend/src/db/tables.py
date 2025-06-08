@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import ClassVar, TypeVar
+from uuid import uuid4
 
 import sqlalchemy as sa
 from sqlalchemy import MetaData
@@ -100,17 +101,17 @@ class UserStatus(str, Enum):
 class UserRole(str, Enum):
     SUPERADMIN = "superadmin"
     ADMIN = "admin"
-    CASHIER = "cashier"
+    USER = "user"
     MANAGER = "manager"
 
 
 class UserProfile(TableBase):
     __tablename__: ClassVar[str] = "user_profiles"
 
-    id = sa.Column(sa.String, primary_key=True)
-    first_name = sa.Column(sa.String, nullable=False)
-    last_name = sa.Column(sa.String, nullable=False)
-    username = sa.Column(sa.String, nullable=False, unique=True, index=True)
+    id = sa.Column(sa.String, primary_key=True, default=lambda: str(uuid4()))
+    first_name = sa.Column(sa.String, nullable=True)
+    last_name = sa.Column(sa.String, nullable=True)
+    username = sa.Column(sa.String, nullable=True, unique=True, index=True)
     email = sa.Column(sa.String, nullable=False, unique=True, index=True)
     phone_number = sa.Column(sa.String, nullable=True)
 
