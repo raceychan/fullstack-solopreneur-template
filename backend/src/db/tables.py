@@ -87,7 +87,7 @@ class Task(TableBase):
     priority = sa.Column(sa.Enum(TaskPriority), nullable=False)
 
 
-# =========== Users ============
+# =========== UserProfiles ============
 
 
 class UserStatus(str, Enum):
@@ -104,13 +104,10 @@ class UserRole(str, Enum):
     MANAGER = "manager"
 
 
-from uuid import uuid4
+class UserProfile(TableBase):
+    __tablename__: ClassVar[str] = "user_profiles"
 
-
-class User(TableBase):
-    __tablename__: ClassVar[str] = "users"
-
-    id = sa.Column(sa.String, primary_key=True, default=lambda: str(uuid4()))
+    id = sa.Column(sa.String, primary_key=True)
     first_name = sa.Column(sa.String, nullable=False)
     last_name = sa.Column(sa.String, nullable=False)
     username = sa.Column(sa.String, nullable=False, unique=True, index=True)
@@ -119,3 +116,13 @@ class User(TableBase):
 
     status = sa.Column(sa.Enum(UserStatus), nullable=False)
     role = sa.Column(sa.Enum(UserRole), nullable=False)
+
+
+class UserAuth(TableBase):
+    __tablename__: ClassVar[str] = "user_auth"
+
+    id = sa.Column(sa.String, primary_key=True)
+    email = sa.Column(sa.String, nullable=False, unique=True, index=True)
+    password_hash = sa.Column(sa.String, nullable=False)
+    is_verified = sa.Column(sa.Boolean, default=False)
+    profile_id = sa.Column(sa.String, sa.ForeignKey("user_profiles.id"), nullable=False)

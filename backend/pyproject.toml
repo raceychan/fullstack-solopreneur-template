@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "aiosqlite>=0.21.0",
+    "bcrypt>=4.3.0",
     "lihil[standard,supabase]>=0.2.16",
     "sqlalchemy>=2.0.41",
 ]

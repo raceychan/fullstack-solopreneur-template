@@ -1,19 +1,20 @@
 from datetime import datetime
 from functools import lru_cache
 from typing import Any
+from uuid import uuid4
 
-# from gotrue.types import SignInWithEmailAndPasswordCredentials
-from lihil import Annotated, Payload, Route
+from lihil import Annotated, Empty, Payload, Route
 from lihil.config import lhl_get_config
+from lihil.interface import Record
 from lihil.plugins import IEndpointInfo
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin
 from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuth2Token, OAuthLoginForm
-from sqlalchemy.ext.asyncio import AsyncEngine
+from lihil.plugins.auth.utils import hash_password, verify_password
+from sqlalchemy import insert, select, update
+from src.app.profile import ProfileService, UserProfileCreate, UserProfileDTO
 from src.config import ProjectConfig
-from supabase import AsyncClient as SBClient
-
-tokens = Route("token")
-me = Route("me")
+from src.db.factory import AsyncConnection, conn_factory
+from src.db.tables import UserAuth, UserRole, UserStatus
 
 
 @lru_cache
@@ -39,48 +40,110 @@ def jwt_encode(endpint_info: IEndpointInfo):
     return jwt_auth.encode_plugin(expires_in_s=config.JWT_EXPIRES_S)(endpint_info)
 
 
-# async def sb_login_get_token(
-#     login_form: OAuthLoginForm,
-#     client: SBClient,
-# ) -> OAuth2Token:
-#     form = SignInWithEmailAndPasswordCredentials(
-#         email=login_form.username, password=login_form.password
-#     )
-#     resp = await client.auth.sign_in_with_password(form)
-#     resp_session = resp.session
-#     if not resp_session:
-#         raise Exception("no session")
-
-
-#     return OAuth2Token(resp_session.access_token, resp_session.expires_in)
-
-
-class PublicUser(Payload):
+class SignUpRequest(Record):
     email: str
-    last_login: datetime
-
-    @classmethod
-    def from_user_dict(cls, user_dict: dict[str, Any]):
-        email = user_dict["email"]
-        last_login = datetime.fromtimestamp(float(user_dict["iat"]))
-
-        return cls(email, last_login)
+    password: str
+    first_name: str
+    last_name: str
+    username: str
+    phone_number: str | None = None
 
 
+class AuthService:
+    def __init__(self, conn: AsyncConnection, profile_service: ProfileService):
+        self._conn = conn
+        self._profile_service = profile_service
+
+    async def sign_up(self, signup_request: SignUpRequest):
+        profile_data = UserProfileCreate(
+            first_name=signup_request.first_name,
+            last_name=signup_request.last_name,
+            username=signup_request.username,
+            email=signup_request.email,
+            phone_number=signup_request.phone_number,
+            status=UserStatus.ACTIVE,
+            role=UserRole.CASHIER,
+        )
+
+        profile_id = await self._profile_service.add_profile(profile_data)
+
+        password_hash = hash_password(signup_request.password.encode())
+        auth_data = {
+            "id": str(uuid4()),
+            "email": signup_request.email,
+            "password_hash": password_hash,
+            "is_verified": False,
+            "profile_id": profile_id,
+        }
+
+        sql = insert(UserAuth).values(auth_data)
+        await self._conn.execute(sql)
+        return profile_id
+
+    async def authenticate(self, email: str, password: str) -> UserProfileDTO | None:
+        sql = select(UserAuth).where(UserAuth.email == email)
+        cursor = await self._conn.execute(sql)
+        auth_record = cursor.mappings().first()
+
+        if not auth_record:
+            return None
+
+        if not verify_password(password.encode(), auth_record["password_hash"]):
+            return None
+
+        return await self._profile_service.get_profile(auth_record["profile_id"])
+
+    async def get_profile_by_email(self, email: str) -> UserProfileDTO | None:
+        sql = select(UserAuth).where(UserAuth.email == email)
+        cursor = await self._conn.execute(sql)
+        auth_record = cursor.mappings().first()
+
+        if not auth_record:
+            return None
+
+        profiles = await self._profile_service.list_profiles(limit=1, offset=0)
+        for profile in profiles:
+            if profile.id == auth_record["profile_id"]:
+                return profile
+        return None
+
+
+tokens = Route("token")
+tokens.add_nodes(AuthService, conn_factory, ProfileService)
+auth = Route("auth")
+auth.add_nodes(AuthService, conn_factory, ProfileService)
+
+
+auth_scheme = OAuth2PasswordFlow(token_url="token")
+
+
+@tokens.post(plugins=[jwt_encode])
 async def login_get_token(
-    login_form: OAuthLoginForm, engine: AsyncEngine
+    login_form: OAuthLoginForm, auth_service: AuthService
 ) -> OAuth2Token:
-    return PublicUser(email="admin@email.com", last_login=datetime.now()) # type: ignore
+    profile = await auth_service.authenticate(login_form.username, login_form.password)
+    if not profile:
+        raise Exception("Invalid credentials")
+    # Return a simple token for now
+    return profile  # type: ignore
 
 
-async def get_user(
-    public_user: Annotated[PublicUser | None, JWTAuthParam] = None,
-) -> PublicUser:
-    assert public_user
-    return public_user
+@auth.post
+async def sign_up(
+    auth_service: AuthService,
+    signup_request: SignUpRequest,
+) -> Annotated[Empty, 201]:
+    await auth_service.sign_up(signup_request)
 
 
-tokens.post(plugins=[jwt_encode])(login_get_token)
-me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_decode])(
-    get_user
-)
+@auth.sub("me").get(auth_scheme=auth_scheme, plugins=[jwt_decode])
+async def get_me(
+    auth_service: AuthService,
+    user_dict: Annotated[dict[str, Any] | None, JWTAuthParam] = None,
+) -> UserProfileDTO:
+    assert user_dict
+    email = user_dict["email"]
+    profile = await auth_service.get_profile_by_email(email)
+    if not profile:
+        raise Exception("Profile not found")
+    return profile
