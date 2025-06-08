@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { loginGetTokenTokenPost, getUserMeGet } from '@/client/sdk.gen';
+import { loginGetTokenApiV1TokenPost, getUserApiV1MeGet } from '@/client/sdk.gen';
 import type { PublicUser, ProblemDetail } from '@/client/types.gen';
 import { AxiosError } from 'axios';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -28,7 +28,7 @@ function useUserQuery() {
       const token = getAccessToken();
       if (!token) return null;
 
-      const resp = await getUserMeGet();
+      const resp = await getUserApiV1MeGet();
       if (resp.error) {
         // Log error and stack trace
         const error = new Error(`getUserMeGet error: ${JSON.stringify(resp.error)}`);
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = useCallback(async (email: string, password: string) => {
     try {
-      const resp = await loginGetTokenTokenPost({
+      const resp = await loginGetTokenApiV1TokenPost({
         body: { username: email, password },
       });
       if (resp.error) {
@@ -110,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     </AuthContext.Provider>
   );
 };
+
 
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);

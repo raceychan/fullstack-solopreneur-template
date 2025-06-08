@@ -1,6 +1,6 @@
 .PHONY: dev
 dev:
-	uv run python -m src.main --reload
+	uv run python -m src.main
 
 .PHONY: api
 api:

@@ -15,18 +15,15 @@ import {
 } from '@tabler/icons-react'
 import { AudioWaveform, Command, GalleryVerticalEnd } from 'lucide-react'
 import { type SidebarData } from '../types'
+import {config} from "@/config/config"
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: 'satnaing',
-    email: 'satnaingdev@gmail.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
+
   teams: [
     {
-      name: 'Shadcn Admin',
+      name: config.PROJECT_NAME,
       logo: Command,
-      plan: 'Vite + ShadcnUI',
+      plan: config.PROJECT_DESCRIPTION,
     },
     {
       name: 'Acme Inc',

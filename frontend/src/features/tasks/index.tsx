@@ -8,19 +8,12 @@ import { DataTable } from './components/data-table'
 import { TasksDialogs } from './components/tasks-dialogs'
 import { TasksPrimaryButtons } from './components/tasks-primary-buttons'
 import TasksProvider from './context/tasks-context'
-import { tasks } from './data/tasks'
+import { useTasks } from './context/tasks-context'
 
-export default function Tasks() {
+function TaskContent(){
+
+  const { tasks } = useTasks()
   return (
-    <TasksProvider>
-      <Header fixed>
-        <Search />
-        <div className='ml-auto flex items-center space-x-4'>
-          <ThemeSwitch />
-          <ProfileDropdown />
-        </div>
-      </Header>
-
       <Main>
         <div className='mb-2 flex flex-wrap items-center justify-between space-y-2 gap-x-4'>
           <div>
@@ -35,6 +28,22 @@ export default function Tasks() {
           <DataTable data={tasks} columns={columns} />
         </div>
       </Main>
+
+  )
+}
+
+export default function Tasks() {
+
+  return (
+    <TasksProvider>
+      <Header fixed>
+        <Search />
+        <div className='ml-auto flex items-center space-x-4'>
+          <ThemeSwitch />
+          <ProfileDropdown />
+        </div>
+      </Header>
+      <TaskContent/>
 
       <TasksDialogs />
     </TasksProvider>

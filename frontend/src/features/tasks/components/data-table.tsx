@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/table'
 import { DataTablePagination } from '../components/data-table-pagination'
 import { DataTableToolbar } from '../components/data-table-toolbar'
+import { ServerPagination } from '../components/server-pagination'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -57,10 +58,10 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    manualPagination: true,
   })
 
   return (
@@ -116,7 +117,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <ServerPagination />
     </div>
   )
 }

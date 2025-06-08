@@ -5,13 +5,13 @@ import { TasksImportDialog } from './tasks-import-dialog'
 import { TasksMutateDrawer } from './tasks-mutate-drawer'
 
 export function TasksDialogs() {
-  const { open, setOpen, currentRow, setCurrentRow } = useTasks()
+  const { open, setOpen, currentRow, setCurrentRow, removeTask } = useTasks()
   return (
     <>
       <TasksMutateDrawer
         key='task-create'
         open={open === 'create'}
-        onOpenChange={() => setOpen('create')}
+        onOpenChange={(isOpen) => setOpen(isOpen ? 'create' : null)}
       />
 
       <TasksImportDialog
@@ -25,11 +25,13 @@ export function TasksDialogs() {
           <TasksMutateDrawer
             key={`task-update-${currentRow.id}`}
             open={open === 'update'}
-            onOpenChange={() => {
-              setOpen('update')
-              setTimeout(() => {
-                setCurrentRow(null)
-              }, 500)
+            onOpenChange={(isOpen) => {
+              setOpen(isOpen ? 'update' : null)
+              if (!isOpen) {
+                setTimeout(() => {
+                  setCurrentRow(null)
+                }, 500)
+              }
             }}
             currentRow={currentRow}
           />
@@ -45,14 +47,11 @@ export function TasksDialogs() {
               }, 500)
             }}
             handleConfirm={() => {
+              removeTask(currentRow.id)
               setOpen(null)
               setTimeout(() => {
                 setCurrentRow(null)
               }, 500)
-              showSubmittedData(
-                currentRow,
-                'The following task has been deleted:'
-              )
             }}
             className='max-w-md'
             title={`Delete this task: ${currentRow.id} ?`}
