@@ -94,12 +94,42 @@ export type InvalidRequestErrors = {
 };
 
 /**
- * PublicUser
+ * SignUpRequest
  */
-export type PublicUser = {
+export type SignUpRequest = {
     email: string;
-    last_login: string;
+    password: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+    phone_number?: string | null;
 };
+
+/**
+ * UserProfileDTO
+ */
+export type UserProfileDto = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+    phone_number: string | null;
+    status: UserStatus;
+    role: UserRole;
+    gmt_created: string;
+    gmt_modified: string;
+};
+
+/**
+ * UserStatus
+ */
+export type UserStatus = 'active' | 'inactive' | 'invited' | 'suspended';
+
+/**
+ * UserRole
+ */
+export type UserRole = 'admin' | 'cashier' | 'manager' | 'superadmin';
 
 /**
  * We received your credential but could not validate it
@@ -200,17 +230,42 @@ export type LoginGetTokenApiV1TokenPostResponses = {
 
 export type LoginGetTokenApiV1TokenPostResponse = LoginGetTokenApiV1TokenPostResponses[keyof LoginGetTokenApiV1TokenPostResponses];
 
-export type GetUserApiV1MeGetData = {
+export type SignUpApiV1AuthPostData = {
+    body: SignUpRequest;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth';
+};
+
+export type SignUpApiV1AuthPostErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type SignUpApiV1AuthPostError = SignUpApiV1AuthPostErrors[keyof SignUpApiV1AuthPostErrors];
+
+export type SignUpApiV1AuthPostResponses = {
+    /**
+     * No Content
+     */
+    200: unknown;
+};
+
+export type GetMeApiV1AuthMeGetData = {
     body?: never;
     headers?: {
-        Authorization?: null | PublicUser;
+        Authorization?: {
+            [key: string]: unknown;
+        } | null;
     };
     path?: never;
     query?: never;
-    url: '/api/v1/me';
+    url: '/api/v1/auth/me';
 };
 
-export type GetUserApiV1MeGetErrors = {
+export type GetMeApiV1AuthMeGetErrors = {
     /**
      * Unauthorized
      */
@@ -221,16 +276,16 @@ export type GetUserApiV1MeGetErrors = {
     422: InvalidRequestErrors;
 };
 
-export type GetUserApiV1MeGetError = GetUserApiV1MeGetErrors[keyof GetUserApiV1MeGetErrors];
+export type GetMeApiV1AuthMeGetError = GetMeApiV1AuthMeGetErrors[keyof GetMeApiV1AuthMeGetErrors];
 
-export type GetUserApiV1MeGetResponses = {
+export type GetMeApiV1AuthMeGetResponses = {
     /**
      * Successful Response
      */
-    200: PublicUser;
+    200: UserProfileDto;
 };
 
-export type GetUserApiV1MeGetResponse = GetUserApiV1MeGetResponses[keyof GetUserApiV1MeGetResponses];
+export type GetMeApiV1AuthMeGetResponse = GetMeApiV1AuthMeGetResponses[keyof GetMeApiV1AuthMeGetResponses];
 
 export type RemoveTaskApiV1TasksDeleteData = {
     body?: never;
