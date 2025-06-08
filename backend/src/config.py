@@ -1,11 +1,13 @@
-from lihil.plugins.auth.supabase import SupabaseConfig
 from lihil.config import lhl_read_config
+from lihil.plugins.auth.supabase import SupabaseConfig
 
 
 class ProjectConfig(SupabaseConfig, kw_only=True):
     SUPABASE_PG_URL_TEMPLT: str
     SUPABASE_PG_PASSWORD: str
+
     JWT_SECRET: str
+    JWT_EXPIRES_S: int
 
     API_VERSION: str
 

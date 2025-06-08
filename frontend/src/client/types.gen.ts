@@ -127,44 +127,90 @@ export type InvalidAuthError = {
     instance?: string;
 };
 
-export type LoginGetTokenTokenPostData = {
+/**
+ * TaskDTO
+ */
+export type TaskDto = {
+    id: number;
+    title: string;
+    status: TaskStatus;
+    label: TaskLabel;
+    priority: TaskPriority;
+    gmt_created: string;
+    gmt_modified: string;
+};
+
+/**
+ * TaskStatus
+ */
+export type TaskStatus = 'backlog' | 'canceled' | 'done' | 'in progress' | 'todo';
+
+/**
+ * TaskLabel
+ */
+export type TaskLabel = 'bug' | 'documentation' | 'feature';
+
+/**
+ * TaskPriority
+ */
+export type TaskPriority = 'high' | 'low' | 'medium';
+
+/**
+ * TaskCreate
+ */
+export type TaskCreate = {
+    title: string;
+    status: TaskStatus;
+    label: TaskLabel;
+    priority: TaskPriority;
+};
+
+/**
+ * TaskUpdate
+ */
+export type TaskUpdate = {
+    title: string;
+    status: TaskStatus;
+    label: TaskLabel;
+    priority: TaskPriority;
+};
+
+export type LoginGetTokenApiV1TokenPostData = {
     body: OAuthLogin;
     path?: never;
     query?: never;
-    url: '/token';
+    url: '/api/v1/token';
 };
 
-export type LoginGetTokenTokenPostErrors = {
+export type LoginGetTokenApiV1TokenPostErrors = {
     /**
      * Unprocessable Entity
      */
     422: InvalidRequestErrors;
 };
 
-export type LoginGetTokenTokenPostError = LoginGetTokenTokenPostErrors[keyof LoginGetTokenTokenPostErrors];
+export type LoginGetTokenApiV1TokenPostError = LoginGetTokenApiV1TokenPostErrors[keyof LoginGetTokenApiV1TokenPostErrors];
 
-export type LoginGetTokenTokenPostResponses = {
+export type LoginGetTokenApiV1TokenPostResponses = {
     /**
      * Successful Response
      */
     200: OAuth2Token;
 };
 
-export type LoginGetTokenTokenPostResponse = LoginGetTokenTokenPostResponses[keyof LoginGetTokenTokenPostResponses];
+export type LoginGetTokenApiV1TokenPostResponse = LoginGetTokenApiV1TokenPostResponses[keyof LoginGetTokenApiV1TokenPostResponses];
 
-export type GetUserMeGetData = {
+export type GetUserApiV1MeGetData = {
     body?: never;
     headers?: {
-        Authorization?: {
-            [key: string]: unknown;
-        } | null;
+        Authorization?: null | PublicUser;
     };
     path?: never;
     query?: never;
-    url: '/me';
+    url: '/api/v1/me';
 };
 
-export type GetUserMeGetErrors = {
+export type GetUserApiV1MeGetErrors = {
     /**
      * Unauthorized
      */
@@ -175,16 +221,140 @@ export type GetUserMeGetErrors = {
     422: InvalidRequestErrors;
 };
 
-export type GetUserMeGetError = GetUserMeGetErrors[keyof GetUserMeGetErrors];
+export type GetUserApiV1MeGetError = GetUserApiV1MeGetErrors[keyof GetUserApiV1MeGetErrors];
 
-export type GetUserMeGetResponses = {
+export type GetUserApiV1MeGetResponses = {
     /**
      * Successful Response
      */
     200: PublicUser;
 };
 
-export type GetUserMeGetResponse = GetUserMeGetResponses[keyof GetUserMeGetResponses];
+export type GetUserApiV1MeGetResponse = GetUserApiV1MeGetResponses[keyof GetUserApiV1MeGetResponses];
+
+export type RemoveTaskApiV1TasksDeleteData = {
+    body?: never;
+    path?: never;
+    query: {
+        task_id: number;
+    };
+    url: '/api/v1/tasks';
+};
+
+export type RemoveTaskApiV1TasksDeleteErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type RemoveTaskApiV1TasksDeleteError = RemoveTaskApiV1TasksDeleteErrors[keyof RemoveTaskApiV1TasksDeleteErrors];
+
+export type RemoveTaskApiV1TasksDeleteResponses = {
+    /**
+     * Sucessful Response
+     */
+    200: unknown;
+};
+
+export type GetTasksApiV1TasksGetData = {
+    body?: never;
+    path?: never;
+    query?: {
+        limit?: number;
+        offset?: number;
+    };
+    url: '/api/v1/tasks';
+};
+
+export type GetTasksApiV1TasksGetErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type GetTasksApiV1TasksGetError = GetTasksApiV1TasksGetErrors[keyof GetTasksApiV1TasksGetErrors];
+
+export type GetTasksApiV1TasksGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: Array<TaskDto>;
+};
+
+export type GetTasksApiV1TasksGetResponse = GetTasksApiV1TasksGetResponses[keyof GetTasksApiV1TasksGetResponses];
+
+export type CreateNewTaskApiV1TasksPostData = {
+    body: TaskCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/tasks';
+};
+
+export type CreateNewTaskApiV1TasksPostErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type CreateNewTaskApiV1TasksPostError = CreateNewTaskApiV1TasksPostErrors[keyof CreateNewTaskApiV1TasksPostErrors];
+
+export type CreateNewTaskApiV1TasksPostResponses = {
+    /**
+     * No Content
+     */
+    200: unknown;
+};
+
+export type UpdateTaskApiV1TasksPutData = {
+    body: TaskUpdate;
+    path?: never;
+    query: {
+        task_id: number;
+    };
+    url: '/api/v1/tasks';
+};
+
+export type UpdateTaskApiV1TasksPutErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type UpdateTaskApiV1TasksPutError = UpdateTaskApiV1TasksPutErrors[keyof UpdateTaskApiV1TasksPutErrors];
+
+export type UpdateTaskApiV1TasksPutResponses = {
+    /**
+     * No Content
+     */
+    200: unknown;
+};
+
+export type LambdaApiV1HealthGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/health';
+};
+
+export type LambdaApiV1HealthGetErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: InvalidRequestErrors;
+};
+
+export type LambdaApiV1HealthGetError = LambdaApiV1HealthGetErrors[keyof LambdaApiV1HealthGetErrors];
+
+export type LambdaApiV1HealthGetResponses = {
+    /**
+     * Sucessful Response
+     */
+    200: unknown;
+};
 
 export type ClientOptions = {
     baseURL: `${string}://openapi.json` | (string & {});

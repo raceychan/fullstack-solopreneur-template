@@ -12,9 +12,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useAuth } from '@/context/auth-context'
+import { useAuthenticatedUser } from '@/hooks/useAuthenticatedUser'
 
 export function ProfileDropdown() {
-  const { user, logout } = useAuth()
+  const { logout } = useAuth()
+  const user = useAuthenticatedUser()
 
   return (
     <DropdownMenu modal={false}>
@@ -22,7 +24,7 @@ export function ProfileDropdown() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback>SN</AvatarFallback>
+            <AvatarFallback>Lihil</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { showSubmittedData } from '@/utils/show-submitted-data'
 import { Button } from '@/components/ui/button'
 import {
@@ -24,6 +25,8 @@ import {
 } from '@/components/ui/sheet'
 import { SelectDropdown } from '@/components/select-dropdown'
 import { Task } from '../data/schema'
+import { TaskCreate, TaskUpdate } from '@/client/types.gen'
+import { useTasks } from '../context/tasks-context'
 
 interface Props {
   open: boolean
@@ -41,10 +44,11 @@ type TasksForm = z.infer<typeof formSchema>
 
 export function TasksMutateDrawer({ open, onOpenChange, currentRow }: Props) {
   const isUpdate = !!currentRow
+  const { createTask, updateTask } = useTasks()
 
   const form = useForm<TasksForm>({
     resolver: zodResolver(formSchema),
-    defaultValues: currentRow ?? {
+    defaultValues: {
       title: '',
       status: '',
       label: '',
@@ -52,11 +56,50 @@ export function TasksMutateDrawer({ open, onOpenChange, currentRow }: Props) {
     },
   })
 
+  // Reset form values when currentRow changes
+  useEffect(() => {
+    if (currentRow) {
+      form.reset({
+        title: currentRow.title,
+        status: currentRow.status,
+        label: currentRow.label,
+        priority: currentRow.priority,
+      })
+    } else {
+      form.reset({
+        title: '',
+        status: '',
+        label: '',
+        priority: '',
+      })
+    }
+  }, [currentRow, form])
+
   const onSubmit = (data: TasksForm) => {
-    // do something with the form data
+    console.log('Form submitted:', { data, isUpdate, currentRow })
+    if (isUpdate && currentRow) {
+      // Update existing task
+      const taskUpdate: TaskUpdate = {
+        title: data.title,
+        status: data.status as TaskUpdate['status'],
+        label: data.label as TaskUpdate['label'],
+        priority: data.priority as TaskUpdate['priority'],
+      }
+      console.log('Calling updateTask with:', currentRow.id, taskUpdate)
+      updateTask(currentRow.id, taskUpdate)
+    } else {
+      // Create new task
+      const newTask: TaskCreate = {
+        title: data.title,
+        status: data.status as TaskCreate['status'],
+        label: data.label as TaskCreate['label'],
+        priority: data.priority as TaskCreate['priority'],
+      }
+      console.log('Calling createTask with:', newTask)
+      createTask(newTask)
+    }
     onOpenChange(false)
     form.reset()
-    showSubmittedData(data)
   }
 
   return (

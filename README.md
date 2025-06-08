@@ -1,3 +1,18 @@
+# Lihil Solopreneur Fullstack template
+
+## DashBoard
+![dashboard](/docs/images/sales.png)
+
+## User administration & access control
+![users](/docs/images/users.png)
+
+## Sign Up & Sign In & OAuth
+![login](/docs/images/login.png)
+
+## Task CRUD
+![tasks](/docs/images/tasks.png)
+
+
 ## Tech Stack
 
 a full-fledged solopreneur template to let you develop & deploy an app with 0 cost.

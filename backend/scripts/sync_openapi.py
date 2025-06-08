@@ -9,9 +9,8 @@ FRONTEND_DIR = Path.cwd().parent / "frontend"
 OPENAPI_PATH = FRONTEND_DIR / "openapi.json"
 
 
-async def modify_openapi():
+def modify_openapi():
     app = app_factory()
-    await app._setup()
     openapi = app.genereate_oas()
     content = encode(openapi).decode()
     OPENAPI_PATH.touch(exist_ok=True)
@@ -19,4 +18,4 @@ async def modify_openapi():
 
 
 if __name__ == "__main__":
-    asyncio.run(modify_openapi())
+    modify_openapi()

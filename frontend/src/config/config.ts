@@ -5,16 +5,20 @@ import { getAccessToken, removeAccessToken } from "@/utils/auth-utils"
 
 const ENV = import.meta.env;
 
+const PROJECT_NAME = ENV.VITE_PROJECT_NAME ?? "Lihil-solopreneur"
+const PROJECT_DESCRIPTION = ENV.VITE_PROJECT_DESCRIPTION?? "Full stack solopreneur template"
 const API_HOST = ENV.VITE_BACKEND_API_HOST ?? "localhost";
 const API_PORT = ENV.VITE_BACKEND_API_PORT ?? "8000";
 const API_VERSION = ENV.VITE_BACKEND_API_VERSION ?? "1";
 const API_NETLOC = `${API_HOST}:${API_PORT}`;
-const API_BASE_URL = `http://${API_NETLOC}/api/v${API_VERSION}`;
+const API_BASE_URL = `http://${API_NETLOC}`;
 
 const REQUEST_TIMEOUT_MS = Number(ENV.VITE_REQUEST_TIMEOUT_MS ?? "3000");
 
 
 export const config = {
+  PROJECT_NAME,
+  PROJECT_DESCRIPTION,
   API_HOST,
   API_PORT,
   API_VERSION,

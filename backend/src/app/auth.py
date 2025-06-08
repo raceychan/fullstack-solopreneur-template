@@ -34,8 +34,9 @@ def jwt_decode(endpint_info: IEndpointInfo):
 
 
 def jwt_encode(endpint_info: IEndpointInfo):
+    config = lhl_get_config(config_type=ProjectConfig)
     jwt_auth = jwt_factory()
-    return jwt_auth.encode_plugin(expires_in_s=600)(endpint_info)
+    return jwt_auth.encode_plugin(expires_in_s=config.JWT_EXPIRES_S)(endpint_info)
 
 
 # async def sb_login_get_token(
@@ -68,8 +69,8 @@ class PublicUser(Payload):
 
 async def login_get_token(
     login_form: OAuthLoginForm, engine: AsyncEngine
-) -> PublicUser:
-    return PublicUser(email="admin@email.com", last_login=datetime.now())
+) -> OAuth2Token:
+    return PublicUser(email="admin@email.com", last_login=datetime.now()) # type: ignore
 
 
 async def get_user(
