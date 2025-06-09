@@ -7,7 +7,7 @@ import { useTasks } from '../context/tasks-context'
 
 export function ServerPagination() {
   const { pagination, tasks } = useTasks()
-  const { page, limit, hasNextPage, hasPreviousPage, nextPage, previousPage } = pagination
+  const { page, hasNextPage, hasPreviousPage, nextPage, previousPage } = pagination
 
   return (
     <div className='flex items-center justify-between px-2'>
