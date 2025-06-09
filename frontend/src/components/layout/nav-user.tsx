@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import {
   BadgeCheck,
   Bell,
@@ -44,8 +44,8 @@ export function NavUser() {
                 <AvatarFallback className='rounded-lg'>Lihil</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{user.email}</span>
-                <span className='truncate text-xs'>{user.email}</span>
+                <span className='truncate font-semibold'>{user?.email}</span>
+                <span className='truncate text-xs'>{user?.email}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -59,12 +59,12 @@ export function NavUser() {
             <DropdownMenuLabel className='p-0 font-normal'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={''} alt={user?.first_name || user?.email || 'User'} />
                   <AvatarFallback className='rounded-lg'>SN</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{user.name}</span>
-                  <span className='truncate text-xs'>{user.email}</span>
+                  <span className='truncate font-semibold'>{user?.first_name || user?.username || user?.email}</span>
+                  <span className='truncate text-xs'>{user?.email}</span>
                 </div>
               </div>
             </DropdownMenuLabel>

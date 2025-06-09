@@ -1,5 +1,4 @@
 import {
-  IconCash,
   IconShield,
   IconUser,
   IconUsersGroup,

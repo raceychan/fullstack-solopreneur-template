@@ -1,5 +1,8 @@
 [lihil]
-API_VERSION="1"
+API_VERSION = "1"
 
 
-# [lihil.d]
+[lihil.db]
+DIALECT = "sqlite"
+DRIVER = "aiosqlite"
+DATABASE="test.db"
