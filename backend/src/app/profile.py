@@ -78,7 +78,6 @@ class ProfileService:
 
 
 profiles = Route("profiles")
-profiles.add_nodes(ProfileService, conn_factory)
 
 
 @profiles.get

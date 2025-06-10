@@ -5,14 +5,17 @@ WORKDIR /app
 # Copy dependency files
 COPY pyproject.toml ./
 
-# Copy source code
-COPY src/ ./src/
+
 
 # Install the package and then uninstall it to keep only dependencies
 RUN pip install . && pip uninstall -y src
 
+# copy config file
 COPY settings.toml ./
 COPY .env ./
+
+# Copy source code
+COPY src/ ./src/
 
 EXPOSE 8000
 

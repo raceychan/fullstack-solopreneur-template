@@ -9,6 +9,7 @@ from lihil.plugins import IEndpointInfo
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin
 from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuth2Token, OAuthLoginForm
 from lihil.plugins.auth.utils import hash_password, verify_password
+from lihil.problems import InvalidAuthError, HTTPException
 from sqlalchemy import insert, select
 from src.app.profile import ProfileService, UserProfileCreate, UserProfileDTO
 from src.config import ProjectConfig
@@ -39,6 +40,13 @@ def jwt_encode(endpint_info: IEndpointInfo):
     return jwt_auth.encode_plugin(expires_in_s=config.JWT_EXPIRES_S)(endpint_info)
 
 
+class EmailRegisteredError(HTTPException):
+    """Exception raised when attempting to register with an email that's already in use."""
+    
+    def __init__(self, email: str):
+        super().__init__(problem_status=400, detail=f"Email {email} is already registered")
+
+
 class SignUpRequest(Record):
     email: str
     password: str
@@ -50,6 +58,10 @@ class AuthService:
         self._profile_service = profile_service
 
     async def sign_up(self, signup_request: SignUpRequest):
+        existing_user = await self.get_profile_by_email(signup_request.email)
+        if existing_user:
+            raise EmailRegisteredError(signup_request.email)
+
         profile_data = UserProfileCreate(
             email=signup_request.email,
             status=UserStatus.ACTIVE,
@@ -99,7 +111,6 @@ class AuthService:
 
 
 tokens = Route("token")
-tokens.add_nodes(AuthService, conn_factory, ProfileService)
 auth = Route("auth")
 
 
@@ -112,8 +123,7 @@ async def login_get_token(
 ) -> UserProfileDTO:
     profile = await auth_service.authenticate(login_form.username, login_form.password)
     if not profile:
-        raise Exception("Invalid credentials")
-    # Return a simple token for now
+        raise InvalidAuthError("Invalid credentials")
     return profile
 
 
