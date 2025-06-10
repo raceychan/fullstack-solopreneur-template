@@ -446,7 +446,7 @@ wheels = [
 
 [[package]]
 name = "lihil"
-version = "0.2.17"
+version = "0.2.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ididi" },
@@ -457,9 +457,9 @@ dependencies = [
     { name = "starlette" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e4/51/ba6323dccd7765a47ca1d975929cade5b2793954122f7fae8fcadc052948/lihil-0.2.17.tar.gz", hash = "sha256:4e0d2ad5c4fe0a0fde45cd42495c7de9fcf367b604d3e5dfb7d86b466d07f1fd", size = 284831 }
+sdist = { url = "https://files.pythonhosted.org/packages/b5/b0/98bba64d7a0907c5d68a0a39d981339fd5ebf6280eef343a002a56e5cf1d/lihil-0.2.19.tar.gz", hash = "sha256:83d88ea5702dc4783a957abc06884e46b6fd6448bd2239d549d80ac20b8c0e16", size = 285166 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f4/91/1e19b3c0601349ee1a3b1e5a35b971497f3dad7731a664aa771ea734c502/lihil-0.2.17-py3-none-any.whl", hash = "sha256:179a6b2f530c1f74d08eb49017702fba46ace3df9064b7e3c4e6727e81b425c0", size = 85889 },
+    { url = "https://files.pythonhosted.org/packages/c4/b7/ec03fb38b92ef2d65d44614c4ac5fb4160c43396ba8735fe179a5a2ec880/lihil-0.2.19-py3-none-any.whl", hash = "sha256:0b08b0b86bf39d1462dd012d8dfcb964689e19ed63567f2d70f86048fbfec4ac", size = 86030 },
 ]
 
 [package.optional-dependencies]
@@ -877,7 +877,7 @@ dependencies = [
 requires-dist = [
     { name = "aiosqlite", specifier = ">=0.21.0" },
     { name = "bcrypt", specifier = ">=4.3.0" },
-    { name = "lihil", extras = ["standard", "supabase"], specifier = ">=0.2.17" },
+    { name = "lihil", extras = ["standard", "supabase"], specifier = ">=0.2.19" },
     { name = "sqlalchemy", specifier = ">=2.0.41" },
 ]
 
