@@ -2,19 +2,19 @@ from functools import lru_cache
 from typing import Any
 from uuid import uuid4
 
-from lihil import Annotated, Empty, Route
+from lihil import Annotated, Empty, Route, use
 from lihil.config import lhl_get_config
 from lihil.interface import Record
 from lihil.plugins import IEndpointInfo
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin
-from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuth2Token, OAuthLoginForm
+from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuthLoginForm
 from lihil.plugins.auth.utils import hash_password, verify_password
-from lihil.problems import InvalidAuthError, HTTPException
+from lihil.problems import HTTPException, InvalidAuthError
 from sqlalchemy import insert, select
 from src.app.profile import ProfileService, UserProfileCreate, UserProfileDTO
 from src.config import ProjectConfig
-from src.db.factory import AsyncConnection, conn_factory
-from src.db.tables import UserAuth, UserRole, UserStatus
+from src.db.factory import AsyncConnection
+from src.db.tables import UserAuth, UserStatus
 
 
 @lru_cache
@@ -42,9 +42,11 @@ def jwt_encode(endpint_info: IEndpointInfo):
 
 class EmailRegisteredError(HTTPException):
     """Exception raised when attempting to register with an email that's already in use."""
-    
+
     def __init__(self, email: str):
-        super().__init__(problem_status=400, detail=f"Email {email} is already registered")
+        super().__init__(
+            problem_status=400, detail=f"Email {email} is already registered"
+        )
 
 
 class SignUpRequest(Record):
@@ -110,6 +112,8 @@ class AuthService:
         return None
 
 
+DAuthService = Annotated[AuthService, use(AuthService)]
+
 tokens = Route("token")
 auth = Route("auth")
 
@@ -119,7 +123,7 @@ auth_scheme = OAuth2PasswordFlow(token_url="token")
 
 @tokens.post(plugins=[jwt_encode])
 async def login_get_token(
-    login_form: OAuthLoginForm, auth_service: AuthService
+    login_form: OAuthLoginForm, auth_service: DAuthService
 ) -> UserProfileDTO:
     profile = await auth_service.authenticate(login_form.username, login_form.password)
     if not profile:
@@ -129,7 +133,7 @@ async def login_get_token(
 
 @auth.post
 async def sign_up(
-    auth_service: AuthService,
+    auth_service: DAuthService,
     signup_request: SignUpRequest,
 ) -> Annotated[Empty, 201]:
     await auth_service.sign_up(signup_request)
@@ -137,7 +141,7 @@ async def sign_up(
 
 @auth.sub("me").get(auth_scheme=auth_scheme, plugins=[jwt_decode])
 async def get_me(
-    auth_service: AuthService,
+    auth_service: DAuthService,
     user_dict: Annotated[dict[str, Any] | None, JWTAuthParam] = None,
 ) -> UserProfileDTO:
     assert user_dict

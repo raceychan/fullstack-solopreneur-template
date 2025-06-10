@@ -77,7 +77,7 @@ class ProfileService:
         await self._conn.execute(sql)
 
 
-profiles = Route("profiles")
+profiles = Route("profiles", deps=[ProfileService])
 
 
 @profiles.get

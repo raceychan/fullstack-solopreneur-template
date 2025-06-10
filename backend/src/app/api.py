@@ -1,8 +1,8 @@
 from lihil import Lihil, Route
 from lihil.plugins.auth.supabase import supabase_factory
 from sqlalchemy.ext.asyncio import AsyncEngine
-from src.app.auth import AuthService, auth, tokens
-from src.app.profile import ProfileService, profiles
+from src.app.auth import auth, tokens
+from src.app.profile import profiles
 from src.app.tasks import tasks
 from src.config import read_config
 from src.db.factory import conn_factory, engine_factory
@@ -21,13 +21,7 @@ def app_factory():
 
     root = Route(
         f"/api/v{app_config.API_VERSION}",
-        deps=[
-            supabase_factory,
-            engine_factory,
-            conn_factory,
-            AuthService,
-            ProfileService,
-        ],
+        deps=[supabase_factory, engine_factory, conn_factory],
     )
     root.include_subroutes(tokens, auth, tasks, profiles)
     root.sub("health").get(lambda: "ok")
