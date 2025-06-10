@@ -102,9 +102,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             </FormItem>
           )}
         />
-        <Button className='mt-2' disabled={isLoading}>
-          Login
-        </Button>
+        <div className='grid grid-cols-2 gap-2 mt-2'>
+          <Button disabled={isLoading}>
+            Login
+          </Button>
+          <Button variant='outline' asChild>
+            <Link to='/sign-up'>
+              Sign Up
+            </Link>
+          </Button>
+        </div>
 
         <div className='relative my-2'>
           <div className='absolute inset-0 flex items-center'>

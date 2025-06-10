@@ -1,4 +1,4 @@
-.PHONY: api backend-api frontend-api run backend-run frontend-run
+.PHONY: api backend-api frontend-api run backend frontend
 
 api: backend-api frontend-api
 
@@ -8,10 +8,9 @@ backend-api:
 frontend-api:
 	$(MAKE) -C frontend api
 
-run: backend-run frontend-runt
 
-backend-run:
-	$(MAKE) -C backend run
+backend:
+	$(MAKE) -C backend dev
 
-frontend-run:
-	$(MAKE) -C frontend run
+frontend:
+	$(MAKE) -C frontend dev
