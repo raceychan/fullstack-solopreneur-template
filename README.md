@@ -2,16 +2,47 @@
 
 A full-fledged solopreneur template to let you develop & deploy an app with 0 cost.
 
-Free as in beer, Free as in speech, Free as in ending modern slavery.
+Free as in beer, Free as in speech.
 
 Actively developing.
 
-## Features
+## ✨ Features
 
 - **Dashboard**: Complete analytics and metrics overview
 - **User Management & Access Control**: Full user administration system
 - **Authentication**: Sign up, sign in with OAuth support
 - **Task Management**: Complete CRUD operations for task management
+
+## 💡 What Can I Do with This Template?
+This project is more than just a demo—it’s a production-ready starter with:
+
+- ✅ Best practices for fullstack development using modern tools
+
+- ✅ Real-world examples of authentication, task management, and admin dashboards
+
+- ✅ Clean architecture & Vertical slicing in both frontend and backend
+
+- ✅ Type-safe APIs with auto-generated clients using OpenAPI
+
+- ✅ Pre-configured dev environment with Docker and hot-reloading
+
+You can use this template to:
+
+- 🏁 Kickstart your own project and customize features as needed
+
+- 🧱 Learn how to build fullstack apps with React, TypeScript, Lihil, and Supabase
+
+- 🚀 Deploy a real app on Vercel and Cloudflare with minimal cost
+
+- 🔒 Implement auth flows, access control, and role-based permissions
+
+- 📦 Extend it with your own models, routes, and components
+
+Whether you're building a SaaS app, internal tool, or MVP, this template saves weeks of setup.
+
+
+
+## 📸Previews
 
 ### CMS Dashboard
 ![Dashboard](/docs/images/sales.png)
@@ -26,49 +57,26 @@ Actively developing.
 
 ![Tasks](/docs/images/tasks.png)
 
-## Quick Start
-
-### Option 1: Docker Compose (Recommended)
-
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd fullstack-solopreneur
-
-# Run with Docker Compose
-docker compose up
-```
-
-The application will be available at:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000/api/v1
-
-### Option 2: Local Development
-
-```bash
-# Install dependencies and run backend
-make backend
-
-# In another terminal, run frontend
-make frontend
-```
-
-## Tech Stack
+## 🛠 Tech Stack
 
 ### Frontend
 
-Typescript
+React 19 with TypeScript
 
 | Component   | Tech                         |
 | ----------- | ---------------------------- |
-| UI Library  | shadcnUI                     |
-| Framework   | React(typescript) + TanStack |
+| UI          | shadcnUI, Tailwind CSS       |
+| Framework   | React(typescript)            |
 | Tooling     | Vite                         |
 | API Codegen | OpenAPI-TS                   |
 
-### Backend
+- Tanstack Router for routing
+- Tanstack Query for data fetching
+- Radix UI components
 
-Python 3.10
+Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn-admin)
+
+### Backend
 
 | Component       | Tech     |
 | --------------- | -------- |
@@ -76,38 +84,62 @@ Python 3.10
 | Project manager | uv       |
 | Database        | Postgres |
 
-### Cloud Provider
+<!-- ### Cloud Provider
 
 | Purpose          | Provider   |
 | ---------------- | ---------- |
 | Database         | Supabase   |
 | Frontend Hosting | Cloudflare |
-| Backend Hosting  | Vercel     |
+| Backend Hosting  | Vercel     | -->
 
-## Development Setup
 
-### Prerequisites
+## Quick Start
 
-- **Node.js** (v18 or higher)
-- **Python** (3.10 or higher)
-- **Docker** and **Docker Compose** (for containerized setup)
-- **uv** (Python package manager)
+1. clone repo
 
-### Local Development Setup
+2. install dependencies & set up backend / fronend
 
-1. **Backend Setup**:
-   ```bash
-   cd backend
-   # uv will automatically install dependencies
-   make dev
-   ```
+    Prerequisites
 
-2. **Frontend Setup**:
-   ```bash
-   cd frontend
-   npm install
-   make dev
-   ```
+    - **Node.js** (v18 or higher)
+    - **Python** (3.10 or higher)
+    - **Docker** and **Docker Compose** (for containerized setup)
+    - **uv** (Python package manager)
+
+
+
+    Tutorial on setup backend:
+
+    [backend set up guide](/backend/README.md)
+
+    Tutorial on setup frontend:
+
+    [frontend setup guide](/frontend/README.md)
+
+3. run locally in cli
+
+It is recommended to run frontend and backend separatly in cli
+before building images, as images takes longer to build.
+
+4. build & run images via docker compose
+
+```python
+docker compose up
+```
+
+The application will be available at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000/api/v1
+
+To re-build backend images
+
+```python
+docker compose build backend
+```
+
+5. deploy
+
+TBC
 
 ### API Code Generation
 
@@ -159,95 +191,6 @@ services:
       - "9000:8000"  # Change 8000 to your desired port
 ```
 
-## Getting Started
-
-### Clone the Repository
-
-```bash
-# Clone the entire repository
-git clone <your-repo-url>
-
-# Or clone a specific branch
-git clone -b {branch_name} --single-branch {repo_url}
-```
-
-## Configuration
-
-The application requires configuration through TOML files or environment variables. Below are the required configuration parameters:
-
-### Required Configuration
-
-This project recommends two config files for configuration
-
-`*.env` for secrets, private information
-`*.toml` for app config, public information
-
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `JWT_SECRET` | `str` | - | True | JWT secret key used for token encoding/decoding |
-| `JWT_EXPIRES_S` | `int` | `3600` | False | JWT token expiration time in seconds |
-| `API_VERSION` | `str` | `"1"` | False | API version for route prefixing (`/api/v{API_VERSION}`) |
-
-### Database Configuration (Optional)
-
-Use either custom database or Supabase. If using custom database, configure the `db` section:
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `db.DIALECT` | `str` | - | True | Database dialect (e.g., `postgresql`, `mysql`) |
-| `db.DRIVER` | `str` | - | True | Database driver (e.g., `psycopg2`, `pymysql`) |
-| `db.USER` | `str` | `None` | False | Database username |
-| `db.PASSWORD` | `str` | `None` | False | Database password |
-| `db.HOST` | `str` | `None` | False | Database host |
-| `db.PORT` | `int` | `None` | False | Database port |
-| `db.DATABASE` | `str` | - | True | Database name |
-
-*Required if using custom database instead of Supabase
-
-### Supabase Configuration (Optional)
-
-Alternative to custom database configuration:
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `SUPABASE_URL` | `str` | `None` | False | Supabase project URL for API access |
-| `SUPABASE_API_KEY` | `str` | `None` | False | Supabase API key for authentication |
-| `SUPABASE_PG_URL_TEMPLT` | `str` | `None` | False | Supabase PostgreSQL URL template with `[YOUR-PASSWORD]` placeholder |
-| `SUPABASE_PG_PASSWORD` | `str` | `None` | False | Supabase PostgreSQL database password |
-
-### Configuration Example
-
-Create a `settings.toml` file in the project root:
-
-```toml
-[lihil]
-
-# Option 1: Custom Database
-[lihil.db]
-DIALECT = "postgresql"
-DRIVER = "psycopg2"
-USER = "myuser"
-PASSWORD = "mypass"
-HOST = "localhost"
-PORT = 5432
-DATABASE = "mydb"
-```
-
-```env
-JWT_SECRET="your-secret-key-here"
-JWT_EXPIRES_S=3600
-API_VERSION="1"
-
-# Option 2: Supabase (alternative to custom db)
-
-SUPABASE_URL = "https://your-project.supabase.co"
-SUPABASE_API_KEY = "your-api-key"
-SUPABASE_PG_URL_TEMPLT = "postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres"
-SUPABASE_PG_PASSWORD = "your-db-password"
-```
-
-
 ## Troubleshooting
 
 ### Common Issues
@@ -270,11 +213,16 @@ kill -9 <PID>
 - Default setup uses SQLite (`test.db`) - no additional setup required
 
 **API Generation Fails**:
+
 ```bash
 # Ensure backend is running first
-make backend
+cd backend
 
 # Then generate API in a new terminal
+make api
+
+cd frontend
+
 make api
 ```
 
@@ -309,6 +257,7 @@ docker compose up --build
 3. Make your changes
 4. Test your changes locally
 5. Submit a pull request
+
 
 ## License
 
