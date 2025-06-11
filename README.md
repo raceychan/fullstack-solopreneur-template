@@ -84,13 +84,13 @@ Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn
 | Project manager | uv       |
 | Database        | Postgres |
 
-<!-- ### Cloud Provider
+### Cloud Provider
 
 | Purpose          | Provider   |
 | ---------------- | ---------- |
 | Database         | Supabase   |
 | Frontend Hosting | Cloudflare |
-| Backend Hosting  | Vercel     | -->
+| Backend Hosting  | Vercel     |
 
 
 ## Quick Start
@@ -139,7 +139,7 @@ docker compose build backend
 
 5. deploy
 
-[deploy for free with cloud providers](/docs/deploy.md)
+[Deploy your app for free using cloud providers](/docs/deploy.md)
 
 ### API Code Generation
 
