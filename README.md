@@ -16,27 +16,27 @@ Actively developing.
 ## 💡 What Can I Do with This Template?
 This project is more than just a demo—it’s a production-ready starter with:
 
-- ✅ Best practices for fullstack development using modern tools
+- Best practices for fullstack development using modern tools
 
-- ✅ Real-world examples of authentication, task management, and admin dashboards
+- Real-world examples of authentication, task management, and admin dashboards
 
-- ✅ Clean architecture & Vertical slicing in both frontend and backend
+- Vertical slicing & DDD in both frontend and backend
 
-- ✅ Type-safe APIs with auto-generated clients using OpenAPI
+- Type-safe APIs with auto-generated clients using OpenAPI
 
-- ✅ Pre-configured dev environment with Docker and hot-reloading
+- Pre-configured dev environment with Docker and hot-reloading
 
 You can use this template to:
 
-- 🏁 Kickstart your own project and customize features as needed
+- Kickstart your own project and customize features as needed
 
-- 🧱 Learn how to build fullstack apps with React, TypeScript, Lihil, and Supabase
+- Learn how to build fullstack apps with React, TypeScript, Lihil, and Supabase
 
-- 🚀 Deploy a real app on Vercel and Cloudflare with minimal cost
+- Deploy a real app on Vercel and Cloudflare with minimal cost
 
-- 🔒 Implement auth flows, access control, and role-based permissions
+- Implement auth flows, access control, and role-based permissions
 
-- 📦 Extend it with your own models, routes, and components
+- Extend it with your own models, routes, and components
 
 Whether you're building a SaaS app, internal tool, or MVP, this template saves weeks of setup.
 
@@ -139,7 +139,7 @@ docker compose build backend
 
 5. deploy
 
-TBC
+[deploy for free with cloud providers](/docs/deploy.md)
 
 ### API Code Generation
 
