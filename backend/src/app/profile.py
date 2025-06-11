@@ -4,7 +4,7 @@ from uuid import uuid4
 from lihil import Annotated, Empty, Route
 from lihil.interface import Record
 from sqlalchemy import delete, insert, select, update
-from src.db.factory import AsyncConnection, conn_factory
+from src.db.factory import AsyncConnection
 from src.db.tables import UserProfile, UserRole, UserStatus
 
 
