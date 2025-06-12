@@ -13,7 +13,7 @@ Actively developing.
 - **Authentication**: Sign up, sign in with OAuth support
 - **Task Management**: Complete CRUD operations for task management
 
-## 💡 What Can I Do with This Template?
+## What Can I Do with This Template?
 This project is more than just a demo—it’s a production-ready starter with:
 
 - Best practices for fullstack development using modern tools
@@ -42,7 +42,7 @@ Whether you're building a SaaS app, internal tool, or MVP, this template saves w
 
 
 
-## 📸Previews
+## Previews
 
 ### CMS Dashboard
 ![Dashboard](/docs/images/sales.png)
@@ -57,7 +57,7 @@ Whether you're building a SaaS app, internal tool, or MVP, this template saves w
 
 ![Tasks](/docs/images/tasks.png)
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 
