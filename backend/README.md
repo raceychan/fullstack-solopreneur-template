@@ -1,116 +1,111 @@
-# Backend
+# NestJS Backend
 
-This project uses uv as project /dependencies manager.
+This is a complete rewrite of the Python backend using NestJS framework. The backend provides a comprehensive API for user management and task tracking.
 
-1. Install uv(skip if you have uv installed)
+## Features
+
+- **JWT Authentication** - Secure user registration and login
+- **User Profile Management** - CRUD operations for user profiles  
+- **Task Management** - Complete task lifecycle with status, priority, and labels
+- **Database Integration** - SQLite with TypeORM
+- **Data Validation** - Input validation using class-validator
+- **CORS Support** - Cross-origin resource sharing enabled
+- **Auto Seeding** - Automatic database seeding with sample data
+
+## API Endpoints
+
+### Authentication
+- `POST /api/v1/auth` - User registration
+- `POST /api/v1/token` - User login  
+- `GET /api/v1/auth/me` - Get current user profile (Protected)
+
+### User Profiles  
+- `GET /api/v1/profiles` - List profiles with pagination (Protected)
+- `POST /api/v1/profiles` - Create new profile (Protected)
+- `PUT /api/v1/profiles` - Update profile (Protected)
+- `DELETE /api/v1/profiles` - Delete profile (Protected)
+
+### Tasks
+- `GET /api/v1/tasks` - List tasks with pagination (Protected)
+- `POST /api/v1/tasks` - Create new task (Protected)
+- `PUT /api/v1/tasks` - Update task (Protected) 
+- `DELETE /api/v1/tasks` - Delete task (Protected)
+
+### Health Check
+- `GET /api/v1/health` - Health check endpoint
+
+## Description
+
+Complete NestJS backend implementation providing the same functionality as the original Python backend.
+
+## Project setup
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
+$ npm install
 ```
 
-if you have any problem installing uv, checkout [uv install guide](https://docs.astral.sh/uv/getting-started/installation/)
+## Compile and run the project
 
-2. go to backend directory and install dependencies
+```bash
+# development
+$ npm run start
 
-```python
-cd backend
-uv install
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-3. create a `.env` file to store private config under `backend` folder
+## Run tests
 
-```python
-touch .env
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-There are several config settings listed below, most of them have default values, we will start by create a 
-`JWT_SECRET` for jwt encoding/decoding. 
+## Deployment
 
-If you don't have it already, run this following code in your terminal and copy paste the result into .env file
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-```python
-python -c "import secrets; print(f'JWT_SECRET={secrets.token_urlsafe(64)}')"
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
+$ npm install -g mau
+$ mau deploy
 ```
 
-your `.env` file should look like this
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-```python
-JWT_SECRET=OBnIarAFulPafe8EGugKm71_sNpDDvkWQpvQ_Q-TDjjmgF6_PGink_HnsEsoDojpqHDNyJfIJJ3_bi4m3d2gow
-```
+## Resources
 
+Check out a few resources that may come in handy when working with NestJS:
 
-4. start backend
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-```python
-uvicorn src.main:app
-```
+## Support
 
-## Configuration
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-The application requires configuration through TOML files or environment variables. Below are the required configuration parameters:
+## Stay in touch
 
-### Required Configuration
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-This project recommends two config files for configuration
+## License
 
-`*.env` for secrets, private information
-`*.toml` for app config, public information
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `JWT_SECRET` | `str` | - | True | JWT secret key used for token encoding/decoding |
-| `JWT_EXPIRES_S` | `int` | `3600` | False | JWT token expiration time in seconds |
-| `API_VERSION` | `str` | `"1"` | False | API version for route prefixing (`/api/v{API_VERSION}`) |
-
-### Database Configuration (Optional)
-
-Use either custom database or Supabase. If using custom database, configure the `db` section:
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `db.DIALECT` | `str` | - | True | Database dialect (e.g., `postgresql`, `mysql`) |
-| `db.DRIVER` | `str` | - | True | Database driver (e.g., `psycopg2`, `pymysql`) |
-| `db.USER` | `str` | `None` | False | Database username |
-| `db.PASSWORD` | `str` | `None` | False | Database password |
-| `db.HOST` | `str` | `None` | False | Database host |
-| `db.PORT` | `int` | `None` | False | Database port |
-| `db.DATABASE` | `str` | - | True | Database name |
-
-*Required if using custom database instead of Supabase
-
-### Supabase Configuration (Optional)
-
-Alternative to custom database configuration:
-
-| Parameter | Type | Default | Required | Description |
-|-----------|------|---------|----------|-------------|
-| `SUPABASE_URL` | `str` | `None` | False | Supabase project URL for API access |
-| `SUPABASE_API_KEY` | `str` | `None` | False | Supabase API key for authentication |
-| `SUPABASE_PG_URL_TEMPLT` | `str` | `None` | False | Supabase PostgreSQL URL template with `[YOUR-PASSWORD]` placeholder |
-| `SUPABASE_PG_PASSWORD` | `str` | `None` | False | Supabase PostgreSQL database password |
-
-### Configuration Example
-
-Create a `settings.toml` file in the project root:
-
-```toml
-[lihil]
-API_VERSION = "1"
-
-[lihil.db]
-DIALECT = "sqlite"
-DRIVER = "aiosqlite"
-DATABASE="test.db"
-```
-
-```env
-JWT_SECRET="your-secret-key-here"
-JWT_EXPIRES_S=3600
-
-# Supabase (alternative to custom db)
-
-SUPABASE_URL = "https://your-project.supabase.co"
-SUPABASE_API_KEY = "your-api-key"
-SUPABASE_PG_URL_TEMPLT = "postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres"
-SUPABASE_PG_PASSWORD = "your-db-password"
-```
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

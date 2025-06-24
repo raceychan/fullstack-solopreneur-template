@@ -78,11 +78,20 @@ Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn
 
 ### Backend
 
+**Default (Python/Lihil)**:
 | Component       | Tech     |
 | --------------- | -------- |
 | Framework       | Lihil    |
 | Project manager | uv       |
 | Database        | Postgres |
+
+**Alternative (NestJS)**:
+| Component       | Tech       |
+| --------------- | ---------- |
+| Framework       | NestJS     |
+| Runtime         | Node.js    |
+| Package Manager | npm        |
+| Database        | Postgres   |
 
 ### Cloud Provider
 
@@ -93,7 +102,23 @@ Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn
 | Backend Hosting  | Vercel     |
 
 
+## Backend Options
+
+This template provides two backend implementations:
+
+### Python/Lihil (Default - `master` branch)
+- **Framework**: Lihil (Python FastAPI-based)
+- **Package Manager**: uv
+- **Best for**: Python developers, AI/ML integration, rapid prototyping
+
+### NestJS (`nestjs` branch)
+- **Framework**: NestJS (Node.js/TypeScript)
+- **Package Manager**: npm
+- **Best for**: Node.js developers, enterprise applications, TypeScript consistency
+
 ## Quick Start
+
+### Using Python/Lihil Backend (Default)
 
 1. clone repo
 
@@ -140,6 +165,57 @@ docker compose build backend
 5. deploy
 
 [Deploy your app for free using cloud providers](/docs/deploy.md)
+
+### Using NestJS Backend (Alternative)
+
+To use the NestJS backend instead:
+
+1. **Switch to NestJS branch**:
+```bash
+git checkout nestjs
+```
+
+2. **Install dependencies**:
+```bash
+# Frontend (same as default)
+cd frontend
+npm install
+
+# Backend (NestJS)
+cd ../backend
+npm install
+```
+
+3. **Set up environment**:
+```bash
+# Copy environment file
+cp .env.example .env
+# Edit .env with your database credentials
+```
+
+4. **Run the application**:
+```bash
+# Backend
+cd backend
+npm run start:dev
+
+# Frontend (in another terminal)
+cd frontend
+npm run dev
+```
+
+5. **Docker setup** (optional):
+```bash
+# Build and run with Docker Compose
+docker compose up --build
+```
+
+The NestJS backend provides the same API endpoints and functionality as the Python version, with:
+- TypeScript throughout the backend
+- Decorators for routing and validation
+- Built-in dependency injection
+- Swagger/OpenAPI documentation
+- Same authentication and authorization features
 
 ### API Code Generation
 
