@@ -57,24 +57,32 @@ make frontend
 
 ### Frontend
 
-Typescript
+TypeScript
 
 | Component   | Tech                         |
 | ----------- | ---------------------------- |
 | UI Library  | shadcnUI                     |
-| Framework   | React(typescript) + TanStack |
+| Framework   | React + TanStack             |
 | Tooling     | Vite                         |
 | API Codegen | OpenAPI-TS                   |
 
+- Tanstack Router for routing
+- Tanstack Query for data fetching  
+- Radix UI components
+
+Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn-admin)
+
 ### Backend
 
-Python 3.10
+Python 3.10+
 
 | Component       | Tech     |
 | --------------- | -------- |
 | Framework       | Lihil    |
 | Project manager | uv       |
 | Database        | Postgres |
+
+**Note**: For a NestJS/TypeScript backend alternative, check out the [`nestjs` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/nestjs).
 
 ### Cloud Provider
 
