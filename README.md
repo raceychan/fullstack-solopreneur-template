@@ -1,6 +1,8 @@
-# Lihil Solopreneur Fullstack Template
+# NestJS Solopreneur Fullstack Template
 
 A full-fledged solopreneur template to let you develop & deploy an app with 0 cost.
+
+**NestJS Backend Implementation** - For Python/Lihil backend, see the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
 
 Free as in beer, Free as in speech.
 
@@ -78,20 +80,16 @@ Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn
 
 ### Backend
 
-**Default (Python/Lihil)**:
-| Component       | Tech     |
-| --------------- | -------- |
-| Framework       | Lihil    |
-| Project manager | uv       |
-| Database        | Postgres |
+NestJS with TypeScript
 
-**Alternative (NestJS)**:
 | Component       | Tech       |
 | --------------- | ---------- |
 | Framework       | NestJS     |
 | Runtime         | Node.js    |
 | Package Manager | npm        |
 | Database        | Postgres   |
+
+**Note**: For a Python/Lihil backend alternative, check out the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
 
 ### Cloud Provider
 
@@ -102,100 +100,49 @@ Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn
 | Backend Hosting  | Vercel     |
 
 
-## Backend Options
-
-This template provides two backend implementations:
-
-### Python/Lihil (Default - `master` branch)
-- **Framework**: Lihil (Python FastAPI-based)
-- **Package Manager**: uv
-- **Best for**: Python developers, AI/ML integration, rapid prototyping
-
-### NestJS (`nestjs` branch)
-- **Framework**: NestJS (Node.js/TypeScript)
-- **Package Manager**: npm
-- **Best for**: Node.js developers, enterprise applications, TypeScript consistency
-
 ## Quick Start
 
-### Using Python/Lihil Backend (Default)
+### Option 1: Docker Compose (Recommended)
 
-1. clone repo
+```bash
+# Clone the repository
+git clone https://github.com/raceychan/fullstack-solopreneur-template.git
+cd fullstack-solopreneur-template
 
-2. install dependencies & set up backend / fronend
+# Switch to NestJS branch (this branch)
+git checkout nestjs
 
-    Prerequisites
-
-    - **Node.js** (v18 or higher)
-    - **Python** (3.10 or higher)
-    - **Docker** and **Docker Compose** (for containerized setup)
-    - **uv** (Python package manager)
-
-
-
-    Tutorial on setup backend:
-
-    [backend set up guide](/backend/README.md)
-
-    Tutorial on setup frontend:
-
-    [frontend setup guide](/frontend/README.md)
-
-3. run locally in cli
-
-It is recommended to run frontend and backend separatly in cli
-before building images, as images takes longer to build.
-
-4. build & run images via docker compose
-
-```python
-docker compose up
+# Run with Docker Compose
+docker compose up --build
 ```
 
 The application will be available at:
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000/api/v1
 
-To re-build backend images
+### Option 2: Local Development
 
-```python
-docker compose build backend
-```
+Prerequisites:
+- **Node.js** (v18 or higher)
+- **npm** or **yarn**
+- **Docker** and **Docker Compose** (for database)
 
-5. deploy
-
-[Deploy your app for free using cloud providers](/docs/deploy.md)
-
-### Using NestJS Backend (Alternative)
-
-To use the NestJS backend instead:
-
-1. **Switch to NestJS branch**:
 ```bash
-git checkout nestjs
-```
-
-2. **Install dependencies**:
-```bash
-# Frontend (same as default)
+# 1. Install dependencies
+# Frontend
 cd frontend
 npm install
 
 # Backend (NestJS)
 cd ../backend
 npm install
-```
 
-3. **Set up environment**:
-```bash
-# Copy environment file
+# 2. Set up environment
 cp .env.example .env
 # Edit .env with your database credentials
-```
 
-4. **Run the application**:
-```bash
-# Backend
+# 3. Run the application
+# Backend (in one terminal)
 cd backend
 npm run start:dev
 
@@ -204,18 +151,18 @@ cd frontend
 npm run dev
 ```
 
-5. **Docker setup** (optional):
-```bash
-# Build and run with Docker Compose
-docker compose up --build
-```
+## NestJS Backend Features
 
-The NestJS backend provides the same API endpoints and functionality as the Python version, with:
-- TypeScript throughout the backend
-- Decorators for routing and validation
-- Built-in dependency injection
-- Swagger/OpenAPI documentation
-- Same authentication and authorization features
+This NestJS implementation provides:
+- **TypeScript throughout** the backend
+- **Decorators** for routing and validation  
+- **Built-in dependency injection**
+- **Swagger/OpenAPI documentation**
+- **JWT Authentication** with guards
+- **TypeORM** for database operations
+- **Same API endpoints** as the Python version
+
+**Alternative**: For a Python/Lihil backend implementation, check out the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
 
 ### API Code Generation
 
