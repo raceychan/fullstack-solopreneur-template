@@ -1,50 +1,19 @@
-# NestJS Solopreneur Fullstack Template
+# Next.js Solopreneur Fullstack Template
 
-A full-fledged solopreneur template to let you develop & deploy an app with 0 cost.
+A full-fledged Next.js solopreneur template to let you develop & deploy an app with 0 cost.
 
-**NestJS Backend Implementation** - For Python/Lihil backend, see the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
-
-Free as in beer, Free as in speech.
+Free as in beer, Free as in speech, Free as in ending modern slavery.
 
 Actively developing.
 
-## ✨ Features
+## Features
 
 - **Dashboard**: Complete analytics and metrics overview
 - **User Management & Access Control**: Full user administration system
 - **Authentication**: Sign up, sign in with OAuth support
 - **Task Management**: Complete CRUD operations for task management
-
-## What Can I Do with This Template?
-This project is more than just a demo—it’s a production-ready starter with:
-
-- Best practices for fullstack development using modern tools
-
-- Real-world examples of authentication, task management, and admin dashboards
-
-- Vertical slicing & DDD in both frontend and backend
-
-- Type-safe APIs with auto-generated clients using OpenAPI
-
-- Pre-configured dev environment with Docker and hot-reloading
-
-You can use this template to:
-
-- Kickstart your own project and customize features as needed
-
-- Learn how to build fullstack apps with React, TypeScript, Lihil, and Supabase
-
-- Deploy a real app on Vercel and Cloudflare with minimal cost
-
-- Implement auth flows, access control, and role-based permissions
-
-- Extend it with your own models, routes, and components
-
-Whether you're building a SaaS app, internal tool, or MVP, this template saves weeks of setup.
-
-
-
-## Previews
+- **API Routes**: Full-stack Next.js with built-in API endpoints
+- **Database Integration**: Prisma ORM with PostgreSQL support
 
 ### CMS Dashboard
 ![Dashboard](/docs/images/sales.png)
@@ -59,160 +28,208 @@ Whether you're building a SaaS app, internal tool, or MVP, this template saves w
 
 ![Tasks](/docs/images/tasks.png)
 
+## Quick Start
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd fullstack-solopreneur
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+
+# Set up database
+npm run db:push
+
+# Run the development server
+npm run dev
+```
+
+The application will be available at:
+- **Application**: http://localhost:3000
+
 ## Tech Stack
 
-### Frontend
+### Full-Stack Framework
 
-React 19 with TypeScript
+TypeScript + Next.js 15
 
-| Component   | Tech                         |
-| ----------- | ---------------------------- |
-| UI          | shadcnUI, Tailwind CSS       |
-| Framework   | React(typescript)            |
-| Tooling     | Vite                         |
-| API Codegen | OpenAPI-TS                   |
+| Component       | Tech                         |
+| --------------- | ---------------------------- |
+| Framework       | Next.js 15 (App Router)     |
+| UI Library      | shadcn/ui                    |
+| Styling         | Tailwind CSS                 |
+| Database        | PostgreSQL + Prisma ORM     |
+| Authentication  | NextAuth.js                  |
+| State Management| Zustand                      |
+| Form Handling   | React Hook Form + Zod       |
 
-- Tanstack Router for routing
-- Tanstack Query for data fetching
-- Radix UI components
+- Next.js App Router for full-stack development
+- Server Components and Client Components
+- API Routes for backend functionality
+- Prisma for type-safe database access
+- NextAuth.js for authentication
+- shadcn/ui components built on Radix UI
 
 Frontend is developed based on [shadcn-admin](https://github.com/satnaing/shadcn-admin)
 
-### Backend
+**Note**: For a React+Python backend alternative, check out the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
 
-NestJS with TypeScript
-
-| Component       | Tech       |
-| --------------- | ---------- |
-| Framework       | NestJS     |
-| Runtime         | Node.js    |
-| Package Manager | npm        |
-| Database        | Postgres   |
-
-**Note**: For a Python/Lihil backend alternative, check out the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
-
-### Cloud Provider
+### Deployment
 
 | Purpose          | Provider   |
 | ---------------- | ---------- |
 | Database         | Supabase   |
-| Frontend Hosting | Cloudflare |
-| Backend Hosting  | Vercel     |
+| Application      | Vercel     |
 
+## Development Setup
 
-## Quick Start
+### Prerequisites
 
-### Option 1: Docker Compose (Recommended)
-
-```bash
-# Clone the repository
-git clone https://github.com/raceychan/fullstack-solopreneur-template.git
-cd fullstack-solopreneur-template
-
-# Switch to NestJS branch (this branch)
-git checkout nestjs
-
-# Run with Docker Compose
-docker compose up --build
-```
-
-The application will be available at:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000/api/v1
-
-### Option 2: Local Development
-
-Prerequisites:
 - **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **Docker** and **Docker Compose** (for database)
+- **Git** for version control
+- **PostgreSQL** (local) or **Supabase** account
+
+### Local Development Setup
+
+1. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Environment Configuration**:
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+3. **Database Setup**:
+   ```bash
+   # Push database schema
+   npm run db:push
+   
+   # Generate Prisma client
+   npm run db:generate
+   
+   # (Optional) Seed database
+   npm run db:seed
+   ```
+
+4. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+### Database Management
+
+The project uses Prisma ORM for database management:
 
 ```bash
-# 1. Install dependencies
-# Frontend
-cd frontend
-npm install
+# Generate database client
+npm run db:generate
 
-# Backend (NestJS)
-cd ../backend
-npm install
+# Push schema changes to database
+npm run db:push
 
-# 2. Set up environment
-cp .env.example .env
-# Edit .env with your database credentials
+# Open Prisma Studio (database GUI)
+npm run db:studio
 
-# 3. Run the application
-# Backend (in one terminal)
-cd backend
-npm run start:dev
-
-# Frontend (in another terminal)
-cd frontend
-npm run dev
+# Reset database (dev only)
+npm run db:reset
 ```
-
-## NestJS Backend Features
-
-This NestJS implementation provides:
-- **TypeScript throughout** the backend
-- **Decorators** for routing and validation  
-- **Built-in dependency injection**
-- **Swagger/OpenAPI documentation**
-- **JWT Authentication** with guards
-- **TypeORM** for database operations
-- **Same API endpoints** as the Python version
-
-**Alternative**: For a Python/Lihil backend implementation, check out the [`master` branch](https://github.com/raceychan/fullstack-solopreneur-template/tree/master).
-
-### API Code Generation
-
-The project uses OpenAPI for automatic client generation:
-
-```bash
-# Generate OpenAPI spec and TypeScript client
-make api
-```
-
-This command:
-1. Generates `openapi.json` in the frontend root based on backend type hints
-2. Creates TypeScript SDK in `frontend/src/client/sdk.gen.ts`
 
 ### Port Configuration
 
-#### Default Ports
+#### Default Port
 
-- **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:8000
-- **API Base Path**: `/api/v{API_VERSION}` (default: `/api/v1`)
+- **Application**: http://localhost:3000
 
-#### Changing Ports
+#### Changing Port
 
-**Frontend Port (Vite)**:
 ```bash
-cd frontend
+# Change development port
 npm run dev -- --port 4000
+
+# Or set in package.json scripts
+"dev": "next dev --port 4000"
 ```
 
-**Backend Port**:
+## Getting Started
+
+### Clone the Repository
+
 ```bash
-cd backend
-# For local development
-uv run python -m src.main --port 9000
+# Clone the entire repository
+git clone <your-repo-url>
 
-# Or modify docker-compose.yml for Docker setup
+# Or clone a specific branch
+git clone -b {branch_name} --single-branch {repo_url}
 ```
 
-**Docker Compose Port Mapping**:
-Edit `docker-compose.yml` to change port mappings:
-```yaml
-services:
-  frontend:
-    ports:
-      - "4000:80"  # Change 3000 to your desired port
-  backend: 
-    ports:
-      - "9000:8000"  # Change 8000 to your desired port
+## Configuration
+
+The application uses environment variables for configuration. Create a `.env.local` file in the project root:
+
+### Required Configuration
+
+| Parameter | Type | Default | Required | Description |
+|-----------|------|---------|----------|-------------|
+| `DATABASE_URL` | `string` | - | True | PostgreSQL connection string |
+| `NEXTAUTH_SECRET` | `string` | - | True | NextAuth.js secret key |
+| `NEXTAUTH_URL` | `string` | `http://localhost:3000` | False | Application URL |
+
+### Authentication Configuration
+
+For OAuth providers, add the following:
+
+| Parameter | Type | Default | Required | Description |
+|-----------|------|---------|----------|-------------|
+| `GOOGLE_CLIENT_ID` | `string` | - | False | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | `string` | - | False | Google OAuth client secret |
+| `GITHUB_CLIENT_ID` | `string` | - | False | GitHub OAuth client ID |
+| `GITHUB_CLIENT_SECRET` | `string` | - | False | GitHub OAuth client secret |
+
+### Database Configuration
+
+Choose one of the following database options:
+
+#### Option 1: Local PostgreSQL
+
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/solopreneur"
 ```
+
+#### Option 2: Supabase
+
+```env
+DATABASE_URL="postgresql://postgres:[YOUR-PASSWORD]@db.your-project.supabase.co:5432/postgres"
+```
+
+### Configuration Example
+
+Create a `.env.local` file:
+
+```env
+# Database
+DATABASE_URL="postgresql://postgres:password@localhost:5432/solopreneur"
+
+# NextAuth.js
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+
+# OAuth (Optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+```
+
 
 ## Troubleshooting
 
@@ -221,57 +238,55 @@ services:
 **Port Already in Use**:
 ```bash
 # Check which process is using the port
-lsof -i :3000  # or :8000 for backend
+lsof -i :3000
 
 # Kill the process if needed
 kill -9 <PID>
 
-# Or use different ports as described in Port Configuration section
+# Or use different port
+npm run dev -- --port 4000
 ```
 
 **Database Connection Issues**:
-- Ensure your database is running (if using custom database)
-- Check your `settings.toml` configuration
-- For Supabase, verify your URL and API keys are correct
-- Default setup uses SQLite (`test.db`) - no additional setup required
+- Ensure your PostgreSQL database is running (if using local database)
+- Check your `DATABASE_URL` in `.env.local`
+- For Supabase, verify your connection string and credentials
+- Run `npm run db:push` to ensure schema is up to date
 
-**API Generation Fails**:
-
+**Build Errors**:
 ```bash
-# Ensure backend is running first
-cd backend
-
-# Then generate API in a new terminal
-make api
-
-cd frontend
-
-make api
-```
-
-**Frontend Build Errors**:
-```bash
-cd frontend
-# Clear node_modules and reinstall
-rm -rf node_modules package-lock.json
+# Clear dependencies and reinstall
+rm -rf node_modules package-lock.json .next
 npm install
+
+# Regenerate Prisma client
+npm run db:generate
 ```
 
-**Docker Issues**:
+**Authentication Issues**:
+- Check `NEXTAUTH_SECRET` is set in `.env.local`
+- Verify OAuth provider credentials (if using)
+- Ensure `NEXTAUTH_URL` matches your development URL
+
+**Prisma Issues**:
 ```bash
-# Reset Docker environment
-docker compose down -v
-docker compose up --build
+# Reset Prisma client
+npm run db:generate
+
+# Reset database (dev only)
+npm run db:reset
+
+# View database with Prisma Studio
+npm run db:studio
 ```
 
 ### Development Tips
 
-- Always run `make api` after backend changes that affect API endpoints
-- Use `docker compose down -v` to reset Docker volumes if needed
-- Check `backend/test.db` file permissions if using SQLite locally
-- Frontend hot-reload works automatically with Vite
-- Backend auto-reload is enabled in development mode
-- The backend uses SQLite by default, so no external database setup is required for development
+- Hot-reload works automatically with Next.js
+- Use TypeScript for better development experience
+- Prisma Studio provides a GUI for database management
+- Check browser console and terminal for detailed error messages
+- Use `npm run lint` to catch potential issues early
 
 ## Contributing
 
@@ -280,7 +295,6 @@ docker compose up --build
 3. Make your changes
 4. Test your changes locally
 5. Submit a pull request
-
 
 ## License
 
